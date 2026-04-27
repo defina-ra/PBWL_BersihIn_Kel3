@@ -16,3 +16,20 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// ===== BERSIHIN =====
+Route::get('/bersihin', function () {
+    return view('bersihin.customer.landing');
+});
+Route::get('/bersihin/layanan', function () {
+    return view('bersihin.customer.layanan');
+});
+Route::get('/bersihin/booking', function () {
+    return view('bersihin.customer.booking');
+});
+Route::get('/bersihin/pembayaran', function () {
+    return view('bersihin.customer.pembayaran');
+});
+Route::get('/bersihin/admin', function () {
+    return view('bersihin.admin.dashboard');
+});
