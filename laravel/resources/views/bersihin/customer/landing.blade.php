@@ -46,8 +46,7 @@
       <a href="/bersihin/layanan" class="border border-gray-300 text-gray-700 font-semibold px-7 py-3 rounded-full hover:bg-gray-50 text-sm">Lihat Layanan</a>
     </div>
   </div>
-  <div class="flex-1 flex justify-end">
-   <div class="w-full max-w-lg h-80 rounded-2xl overflow-hidden">
+  <div class="w-full max-w-lg h-80 rounded-2xl overflow-hidden">
   <img src="/images/Professional_cleaning staff.png" 
        alt="Petugas BersihIn"
        class="w-full h-full object-cover">

@@ -14,13 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-// ===== BERSIHIN =====
-Route::get('/bersihin', function () {
     return view('bersihin.customer.landing');
 });
+
 Route::get('/bersihin/layanan', function () {
     return view('bersihin.customer.layanan');
 });
