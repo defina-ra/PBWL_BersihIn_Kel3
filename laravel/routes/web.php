@@ -71,6 +71,7 @@ Route::post('/logout', function () {
 })->name('logout');
 Route::get('/bersihin/admin/detail-pesanan', function () {
     return view('bersihin.admin.detail-pesanan');
+
 });
 Route::get('/bersihin/login', function () {
     return view('bersihin.auth.login');
