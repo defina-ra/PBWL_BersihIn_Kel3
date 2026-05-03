@@ -1,0 +1,76 @@
+/* public/css/dashboard.css */
+
+:root {
+    --primary-dark: #062f21;
+    --primary-light: #0d4a36;
+    --accent-green: #2ecc71;
+    --bg-light: #f8f9fa;
+    --text-muted: #888;
+}
+
+/* Layout Helpers */
+.card {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.03);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+/* Sidebar Styling */
+.sidebar nav div:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding-left: 10px;
+}
+
+/* Progress Stepper Customization */
+.stepper-line {
+    height: 2px;
+    flex: 1;
+    margin-bottom: 24px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0d4a36;
+    border-radius: 10px;
+}
+
+/* Promo Box Effects */
+.promo-code-box {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Button Animations */
+button {
+    transition: all 0.2s active;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* Responsive Fixes */
+@media (max-width: 1024px) {
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+    .sidebar {
+        display: none; /* Kamu bisa ubah jadi burger menu nanti */
+    }
+}
