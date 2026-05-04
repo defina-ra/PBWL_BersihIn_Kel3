@@ -1,4 +1,6 @@
 @extends('bersihin.layouts.admin')
+@section('page-title', 'Laporan Transaksi')
+@section('page-subtitle', 'Rekap keuangan dan audit transaksi')
 
 @section('content')
 <div class="p-8 bg-gray-50 min-h-screen">

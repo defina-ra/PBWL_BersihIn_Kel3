@@ -1,4 +1,6 @@
 @extends('bersihin.layouts.admin')
+@section('page-title', 'Pengaturan')
+@section('page-subtitle', 'Kelola profil dan pengaturan akun admin')
 
 @section('content')
 <div class="p-8 bg-gray-50 min-h-screen">

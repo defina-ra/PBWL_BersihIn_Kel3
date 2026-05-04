@@ -78,7 +78,8 @@
                     <p class="text-gray-500 text-sm">Silakan masuk untuk ke akun anda.</p>
                 </header>
 
-                <form action="#" method="POST" class="space-y-5">
+                <form action="/bersihin/login" method="POST" class="space-y-5">
+    @csrf
                     <!-- Email Field -->
                     <div>
                         <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email</label>

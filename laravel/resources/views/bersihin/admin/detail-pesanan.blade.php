@@ -1,4 +1,6 @@
 @extends('bersihin.layouts.admin')
+@section('page-title', 'Detail Pesanan')
+@section('page-subtitle', 'Informasi lengkap pesanan pelanggan')
 
 @section('content')
 <div class="p-8">

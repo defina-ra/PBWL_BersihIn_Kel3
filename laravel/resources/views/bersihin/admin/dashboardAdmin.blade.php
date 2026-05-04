@@ -1,4 +1,7 @@
 @extends('bersihin.layouts.admin')
+@section('page-title', 'Overview Dashboard')
+@section('page-subtitle', 'Pantau performa layanan BersihIn hari ini')
+
 @section('content')
 
 {{-- Header --}}

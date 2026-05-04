@@ -1,4 +1,6 @@
 @extends('bersihin.layouts.admin')
+@section('page-title', 'Verifikasi Pembayaran')
+@section('page-subtitle', 'Kelola dan verifikasi bukti transfer pelanggan')
 
 @section('content')
 

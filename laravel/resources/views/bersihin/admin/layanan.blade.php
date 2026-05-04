@@ -1,4 +1,6 @@
 @extends('bersihin.layouts.admin')
+@section('page-title', 'Layanan & Promo')
+@section('page-subtitle', 'Kelola daftar layanan dan promosi')
 
 @section('content')
 
