@@ -1,4 +1,4 @@
-@extends('bersihin.layouts.customer')
+@extends('bersihin.layouts.app')
 
 @section('page-title', 'Dashboard')
 @section('page-subtitle', 'Kamis, 3 Mei 2026')

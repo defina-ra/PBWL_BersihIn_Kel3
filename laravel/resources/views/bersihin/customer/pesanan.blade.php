@@ -1,4 +1,4 @@
-@extends('bersihin.layouts.customer')
+@extends('bersihin.layouts.app')
 
 @section('page-title', 'Pesanan Saya')
 @section('page-subtitle', 'Kelola semua pesanan kebersihan kamu')

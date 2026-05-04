@@ -1,0 +1,475 @@
+/* ============================================
+   BERSIHIN.CSS - Satu file CSS untuk semua role
+   Ubah variabel di :root untuk ganti tema global
+   ============================================ */
+
+/* ===== VARIABEL GLOBAL ===== */
+:root {
+    --sidebar-bg: #064E3B;
+    --sidebar-width: 220px;
+    --topbar-height: 64px;
+    --primary: #059669;
+    --primary-dark: #064E3B;
+    --primary-light: #dcfce7;
+    --accent: #4ade80;
+    --danger: #ef4444;
+    --text-dark: #111827;
+    --text-gray: #6b7280;
+    --text-light: #9ca3af;
+    --border: #e5e7eb;
+    --bg-page: #f9fafb;
+    --white: #ffffff;
+    --font-main: 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Sora', sans-serif;
+}
+
+/* ===== RESET ===== */
+* { font-family: var(--font-main); box-sizing: border-box; margin: 0; padding: 0; }
+
+body { background: var(--bg-page); }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    background: var(--sidebar-bg);
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+}
+
+.sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-logo h1 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.5px;
+}
+
+.sidebar-logo span {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+}
+
+/* Profile singkat (petugas) */
+.sidebar-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--primary-dark);
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sidebar-name {
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sidebar-role-label {
+    color: var(--accent);
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+/* Nav */
+.sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: rgba(255,255,255,0.55);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+}
+
+.nav-item svg {
+    width: 17px; height: 17px;
+    flex-shrink: 0;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,0.08);
+    color: var(--white);
+}
+
+.nav-item.active {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+}
+
+/* Bottom nav */
+.sidebar-bottom {
+    padding: 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.nav-logout {
+    color: #fca5a5 !important;
+}
+
+.nav-logout:hover {
+    background: rgba(239,68,68,0.15) !important;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    height: var(--topbar-height);
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    z-index: 40;
+}
+
+.topbar-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.topbar-subtitle {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ===== MAIN AREA ===== */
+.main-wrapper {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    margin-top: var(--topbar-height);
+    padding: 28px;
+    flex: 1;
+}
+
+.footer-text {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-light);
+    padding: 16px;
+}
+
+/* ===== ICON BUTTON (notif) ===== */
+.icon-btn {
+    position: relative;
+    width: 38px; height: 38px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: var(--text-gray);
+}
+
+.icon-btn:hover { background: #f9fafb; }
+
+.notif-badge {
+    position: absolute;
+    top: -4px; right: -4px;
+    width: 17px; height: 17px;
+    background: var(--danger);
+    border-radius: 50%;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-page);
+}
+
+/* ===== NOTIFIKASI DROPDOWN ===== */
+.notif-wrap { position: relative; cursor: pointer; }
+
+.notif-dropdown {
+    position: absolute;
+    top: 48px; right: 0;
+    width: 310px;
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+    border: 1px solid var(--border);
+    display: none;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.notif-dropdown.show { display: block; }
+
+.notif-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.notif-read-btn {
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.notif-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f9fafb;
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.notif-item:hover { background: #f9fafb; }
+.notif-item.unread { background: #f0fdf4; }
+
+.notif-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notif-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.notif-desc {
+    font-size: 11px;
+    color: var(--text-gray);
+    margin-top: 2px;
+}
+
+.notif-time {
+    font-size: 10px;
+    color: var(--primary);
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+/* ===== USER INFO ===== */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.user-text { text-align: right; }
+
+.user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.user-role {
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.user-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--primary-dark);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== TOGGLE STATUS (petugas) ===== */
+.status-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+}
+
+.status-label-text {
+    font-size: 11px;
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+.toggle-btn {
+    width: 38px; height: 20px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    transition: background 0.2s;
+}
+
+.active-toggle { background: var(--primary-dark); }
+.inactive-toggle { background: #d1d5db; }
+
+.toggle-dot {
+    width: 16px; height: 16px;
+    background: var(--white);
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+    display: block;
+}
+
+.status-text {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+/* ===== MODAL LOGOUT ===== */
+.modal-box {
+    position: relative;
+    background: var(--white);
+    border-radius: 24px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 360px;
+    padding: 32px;
+    text-align: center;
+}
+
+.modal-icon {
+    width: 64px; height: 64px;
+    background: #fee2e2;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.modal-desc {
+    font-size: 13px;
+    color: var(--text-gray);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    color: var(--text-gray);
+    font-weight: 600;
+    font-size: 13px;
+    background: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-cancel:hover { background: #f9fafb; }
+
+.btn-logout {
+    width: 100%;
+    padding: 12px;
+    background: var(--danger);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-logout:hover { background: #dc2626; }

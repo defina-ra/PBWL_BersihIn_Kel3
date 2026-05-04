@@ -1,4 +1,4 @@
-@extends('bersihin.layouts.petugas')
+@extends('bersihin.layouts.app')
 
 @section('page-title', 'Performa & Riwayat')
 @section('page-subtitle', 'Pantau kemajuan layanan dan ulasan pelanggan Anda secara real-time.')

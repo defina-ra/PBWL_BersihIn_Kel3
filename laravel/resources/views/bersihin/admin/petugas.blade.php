@@ -1,4 +1,4 @@
-@extends('bersihin.layouts.admin')
+@extends('bersihin.layouts.app')
 @section('page-title', 'Manajemen Petugas')
 @section('page-subtitle', 'Kelola seluruh staf lapangan')
 

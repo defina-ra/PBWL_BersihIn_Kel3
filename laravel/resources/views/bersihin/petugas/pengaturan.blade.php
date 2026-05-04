@@ -1,4 +1,4 @@
-@extends('bersihin.layouts.petugas')
+@extends('bersihin.layouts.app')
 
 @section('page-title', 'Pengaturan Profil')
 @section('page-subtitle', 'Kelola informasi akun dan preferensi kerja Anda')
