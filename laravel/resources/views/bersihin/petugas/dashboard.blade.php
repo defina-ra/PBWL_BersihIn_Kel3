@@ -1,14 +1,14 @@
 @extends('bersihin.layouts.app')
 
 @section('page-title', 'Dashboard')
-@section('page-subtitle', 'Kamis, 30 April 2026')
+@section('page-subtitle', 'Selamat datang kembali')
 
 @section('content')
 
 {{-- GREETING --}}
 <div class="mb-6">
-  <h1 class="text-2xl font-extrabold text-gray-900">Halo, Larasati! 👋</h1>
-  <p class="text-gray-400 text-sm mt-1">Semangat bertugas hari ini. Kamu punya <span class="text-[#064E3B] font-bold">3 tugas</span> yang menanti.</p>
+  <h1 class="text-2xl font-extrabold text-gray-900">Halo, {{ $user->name }}! 👋</h1>
+  <p class="text-gray-400 text-sm mt-1">Semangat bertugas hari ini. Kamu punya <span class="text-[#064E3B] font-bold">{{ $sisaTugas }} tugas</span> yang menanti.</p>
 </div>
 
 {{-- STATS 3 CARDS --}}
@@ -16,7 +16,7 @@
   <div class="bg-white rounded-2xl border border-gray-100 px-5 py-4 flex items-center justify-between">
     <div>
       <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Sisa Tugas Hari Ini</p>
-      <p class="text-3xl font-extrabold text-gray-900">3</p>
+      <p class="text-3xl font-extrabold text-gray-900">{{ $sisaTugas }}</p>
     </div>
     <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center">
       <svg class="w-6 h-6 text-[#064E3B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,7 +27,7 @@
   <div class="bg-white rounded-2xl border border-gray-100 px-5 py-4 flex items-center justify-between">
     <div>
       <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Total Selesai</p>
-      <p class="text-3xl font-extrabold text-gray-900">1</p>
+      <p class="text-3xl font-extrabold text-gray-900">{{ $totalSelesai }}</p>
     </div>
     <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center">
       <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +38,7 @@
   <div class="bg-white rounded-2xl border border-gray-100 px-5 py-4 flex items-center justify-between">
     <div>
       <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Poin Bonus</p>
-      <p class="text-3xl font-extrabold text-gray-900">50</p>
+      <p class="text-3xl font-extrabold text-gray-900">{{ $totalSelesai * 10 }}</p>
     </div>
     <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center">
       <svg class="w-6 h-6 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
@@ -65,10 +65,11 @@
       <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full tracking-wide">PRIORITAS</span>
     </div>
 
+    @if($tugasSelanjutnya)
     <div class="space-y-4">
       <div>
         <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Layanan</p>
-        <p class="font-bold text-gray-900">Deep Cleaning – Kitchen & Living Room</p>
+        <p class="font-bold text-gray-900">{{ $tugasSelanjutnya->service_name }}</p>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
@@ -77,7 +78,7 @@
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
             </svg>
-            <p class="font-semibold text-gray-800">Ibu Ratna</p>
+            <p class="font-semibold text-gray-800">{{ $tugasSelanjutnya->customer_name }}</p>
           </div>
         </div>
         <div>
@@ -86,7 +87,7 @@
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 6v6l4 2"/>
             </svg>
-            <p class="font-semibold text-gray-800">13:00 – 15:00 WIB</p>
+            <p class="font-semibold text-gray-800">{{ $tugasSelanjutnya->booking_time }}</p>
           </div>
         </div>
       </div>
@@ -96,10 +97,15 @@
           <svg class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
           </svg>
-          <p class="text-gray-700 text-sm">Jl. Melati No. 45, Kebayoran Baru, Jakarta Selatan, DKI Jakarta</p>
+          <p class="text-gray-700 text-sm">{{ $tugasSelanjutnya->address }}</p>
         </div>
       </div>
     </div>
+    @else
+    <div class="text-center py-8">
+      <p class="text-gray-400 text-sm">Tidak ada tugas mendatang</p>
+    </div>
+    @endif
 
     <a href="/bersihin/petugas/jadwal"
        class="mt-6 flex items-center justify-center gap-2 w-full bg-[#064E3B] hover:bg-emerald-800 text-white font-bold py-3.5 rounded-xl text-sm transition">
@@ -113,16 +119,13 @@
   {{-- Peta --}}
   <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
     <div class="relative h-full min-h-64 bg-gray-100 flex items-center justify-center">
-      {{-- Simulasi peta --}}
       <div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200">
         <div class="absolute inset-0" style="background-image: repeating-linear-gradient(0deg,transparent,transparent 39px,#e5e7eb 39px,#e5e7eb 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#e5e7eb 39px,#e5e7eb 40px);"></div>
       </div>
-      {{-- Tombol zoom --}}
       <div class="absolute top-4 right-4 flex flex-col gap-1">
         <button class="w-7 h-7 bg-white rounded-lg shadow flex items-center justify-center text-gray-600 font-bold hover:bg-gray-50">+</button>
         <button class="w-7 h-7 bg-white rounded-lg shadow flex items-center justify-center text-gray-600 font-bold hover:bg-gray-50">−</button>
       </div>
-      {{-- Pin lokasi --}}
       <div class="relative z-10 flex flex-col items-center">
         <div class="w-10 h-10 bg-[#064E3B] rounded-full flex items-center justify-center shadow-lg">
           <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -130,15 +133,14 @@
           </svg>
         </div>
         <div class="mt-2 bg-white text-xs font-semibold text-gray-700 px-3 py-1.5 rounded-full shadow">
-          Jl. Melati No. 45
+          {{ $tugasSelanjutnya ? $tugasSelanjutnya->address : 'Tidak ada tugas' }}
         </div>
       </div>
-      {{-- Info jarak --}}
       <div class="absolute bottom-4 left-4 bg-white rounded-xl px-4 py-2.5 shadow flex items-center gap-2">
         <svg class="w-4 h-4 text-[#064E3B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-width="2" d="M13 6h3l3 5v3h-2m-4-8H5v11h2m4-11v11"/>
         </svg>
-        <span class="text-xs font-semibold text-gray-700">8 menit dari lokasi Anda</span>
+        <span class="text-xs font-semibold text-gray-700">Lokasi tugas berikutnya</span>
       </div>
     </div>
   </div>
@@ -148,24 +150,21 @@
 {{-- CATATAN + BANTUAN --}}
 <div class="grid grid-cols-3 gap-6">
 
-  {{-- Catatan Pelanggan --}}
   <div class="col-span-2 bg-white rounded-2xl border border-gray-100 p-6">
     <div class="flex items-center justify-between mb-4">
       <h3 class="font-bold text-gray-900">Catatan Khusus Pelanggan</h3>
-      <button class="text-gray-400 hover:text-gray-600">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/>
-        </svg>
-      </button>
     </div>
+    @if($tugasSelanjutnya)
     <div class="border-l-4 border-[#064E3B] pl-4 bg-green-50/50 py-3 pr-4 rounded-r-xl">
       <p class="text-gray-600 text-sm italic leading-relaxed">
-        "Tolong perhatikan area kolong sofa dan ventilasi AC. Ibu Ratna lebih suka menggunakan pembersih aroma lavender jika tersedia."
+        "Pastikan membawa perlengkapan lengkap untuk layanan {{ $tugasSelanjutnya->service_name }} di {{ $tugasSelanjutnya->address }}."
       </p>
     </div>
+    @else
+    <p class="text-gray-400 text-sm">Tidak ada catatan saat ini.</p>
+    @endif
   </div>
 
-  {{-- Bantuan Cepat --}}
   <div class="bg-white rounded-2xl border border-gray-100 p-6">
     <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-4">Bantuan Cepat</p>
     <div class="space-y-2">

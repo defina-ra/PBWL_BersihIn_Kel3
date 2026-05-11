@@ -28,7 +28,7 @@
         {{-- Total Pendapatan --}}
         <div class="col-span-2 bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Total Pendapatan Periode Ini</p>
-            <p class="text-4xl font-bold text-gray-900 mb-4">Rp 45.250.000</p>
+            <p class="text-4xl font-bold text-gray-900 mb-4">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
             <div class="flex items-center gap-4">
                 <span class="flex items-center gap-1.5 text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
                     <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
@@ -42,7 +42,7 @@
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                     </svg>
-                    Total Transaksi: <span class="font-semibold text-gray-800">184</span>
+                    Total Transaksi: <span class="font-semibold text-gray-800">{{ $totalTransaksi }}</span>
                 </div>
             </div>
         </div>
@@ -134,51 +134,41 @@
                 </thead>
                 <tbody class="divide-y divide-gray-50">
 
-                    @php
-                    $transaksi = [
-                        ['tgl' => '24 Sep 2023', 'jam' => '14:20 WIB', 'id' => '#INV-88219', 'nama' => 'Budi Santoso',    'layanan' => 'Deep Cleaning', 'warna' => 'bg-blue-100 text-blue-700',    'nominal' => 'Rp 450.000', 'laba' => 'Rp 135.000'],
-                        ['tgl' => '24 Sep 2023', 'jam' => '11:05 WIB', 'id' => '#INV-88218', 'nama' => 'Siti Aminah',    'layanan' => 'Bersih Rutin',  'warna' => 'bg-green-100 text-green-700',  'nominal' => 'Rp 250.000', 'laba' => 'Rp 75.000'],
-                        ['tgl' => '23 Sep 2023', 'jam' => '16:45 WIB', 'id' => '#INV-88217', 'nama' => 'Andi Pratama',   'layanan' => 'Sedot Tungau',  'warna' => 'bg-orange-100 text-orange-700','nominal' => 'Rp 320.000', 'laba' => 'Rp 96.000'],
-                        ['tgl' => '23 Sep 2023', 'jam' => '09:15 WIB', 'id' => '#INV-88216', 'nama' => 'Lina Wijaya',    'layanan' => 'Cuci Kasur',    'warna' => 'bg-purple-100 text-purple-700','nominal' => 'Rp 600.000', 'laba' => 'Rp 180.000'],
-                        ['tgl' => '22 Sep 2023', 'jam' => '13:30 WIB', 'id' => '#INV-88215', 'nama' => 'Rizky Ramadhan', 'layanan' => 'Deep Cleaning', 'warna' => 'bg-blue-100 text-blue-700',    'nominal' => 'Rp 850.000', 'laba' => 'Rp 255.000'],
-                        ['tgl' => '22 Sep 2023', 'jam' => '10:00 WIB', 'id' => '#INV-88214', 'nama' => 'Diana Putri',    'layanan' => 'Bersih Rutin',  'warna' => 'bg-green-100 text-green-700',  'nominal' => 'Rp 250.000', 'laba' => 'Rp 75.000'],
-                        ['tgl' => '21 Sep 2023', 'jam' => '15:20 WIB', 'id' => '#INV-88213', 'nama' => 'Hendra Gunawan', 'layanan' => 'Cuci Kasur',    'warna' => 'bg-purple-100 text-purple-700','nominal' => 'Rp 500.000', 'laba' => 'Rp 150.000'],
-                        ['tgl' => '21 Sep 2023', 'jam' => '08:45 WIB', 'id' => '#INV-88212', 'nama' => 'Maya Sari',      'layanan' => 'Sedot Tungau',  'warna' => 'bg-orange-100 text-orange-700','nominal' => 'Rp 320.000', 'laba' => 'Rp 96.000'],
-                    ];
-                    @endphp
-
-                    @foreach($transaksi as $t)
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <p class="text-sm font-semibold text-gray-800">{{ $t['tgl'] }}</p>
-                            <p class="text-xs text-gray-400 mt-0.5">{{ $t['jam'] }}</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="text-sm font-semibold text-green-700">{{ $t['id'] }}</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="text-sm font-medium text-gray-800">{{ $t['nama'] }}</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {{-- rounded-lg bukan rounded-full, supaya tulisan tidak wrap --}}
-                            <span class="inline-block px-3 py-1 rounded-lg text-xs font-semibold {{ $t['warna'] }}">
-                                {{ $t['layanan'] }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600">
-                                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                                Selesai
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right">
-                            <span class="text-sm font-semibold text-gray-800">{{ $t['nominal'] }}</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right">
-                            <span class="text-sm font-bold text-emerald-600">{{ $t['laba'] }}</span>
-                        </td>
-                    </tr>
-                    @endforeach
+                   @forelse($transaksi as $t)
+<tr class="hover:bg-gray-50 transition">
+    <td class="px-6 py-4 whitespace-nowrap">
+        <p class="text-sm font-semibold text-gray-800">{{ \Carbon\Carbon::parse($t->created_at)->format('d M Y') }}</p>
+        <p class="text-xs text-gray-400 mt-0.5">{{ \Carbon\Carbon::parse($t->created_at)->format('H:i') }} WIB</p>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap">
+        <span class="text-sm font-semibold text-green-700">#INV-{{ $t->id }}</span>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap">
+        <span class="text-sm font-medium text-gray-800">{{ $t->customer_name }}</span>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap">
+        <span class="inline-block px-3 py-1 rounded-lg text-xs font-semibold bg-green-100 text-green-700">
+            {{ $t->service_name }}
+        </span>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap">
+        <span class="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600">
+            <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+            {{ ucfirst($t->payment_status) }}
+        </span>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap text-right">
+        <span class="text-sm font-semibold text-gray-800">Rp {{ number_format($t->amount, 0, ',', '.') }}</span>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap text-right">
+        <span class="text-sm font-bold text-emerald-600">Rp {{ number_format($t->amount * 0.3, 0, ',', '.') }}</span>
+    </td>
+</tr>
+@empty
+<tr>
+    <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-400">Belum ada transaksi</td>
+</tr>
+@endforelse
 
                 </tbody>
             </table>

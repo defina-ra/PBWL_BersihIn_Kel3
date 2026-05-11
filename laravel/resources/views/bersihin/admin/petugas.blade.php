@@ -83,61 +83,35 @@
             </thead>
             <tbody class="divide-y divide-gray-50">
 
-                @php
-                $petugas = [
-                    ['inisial' => 'BS', 'warna' => 'bg-green-500',  'nama' => 'Bambang Susanto', 'id' => 'BS-9921', 'tugas' => '80 Selesai', 'rating' => '4.9', 'status' => 'Ready'],
-                    ['inisial' => 'AP', 'warna' => 'bg-blue-500',   'nama' => 'Agus Prayoga',    'id' => 'AP-2281', 'tugas' => '34 Selesai',   'rating' => '4.8', 'status' => 'Working'],
-                    ['inisial' => 'RH', 'warna' => 'bg-purple-500', 'nama' => 'Rian Hidayat',    'id' => 'RH-1029', 'tugas' => '62 Selesai',   'rating' => '5.0', 'status' => 'Ready'],
-                    ['inisial' => 'MI', 'warna' => 'bg-pink-500',   'nama' => 'Maya Indah',      'id' => 'MI-3312', 'tugas' => '24 Selesai',   'rating' => '4.7', 'status' => 'Ready'],
-                    ['inisial' => 'BD', 'warna' => 'bg-amber-500',  'nama' => 'Budi Darsono',    'id' => 'BD-4421', 'tugas' => '31 Selesai',   'rating' => '4.6', 'status' => 'Off'],
-                ];
-                @endphp
-
-                @foreach($petugas as $p)
-                <tr class="hover:bg-gray-50/50">
-                    <td class="px-6 py-4">
-                        <div class="relative w-10 h-10">
-                            <div class="w-10 h-10 {{ $p['warna'] }} rounded-full flex items-center justify-center text-white text-sm font-bold">
-                                {{ $p['inisial'] }}
-                            </div>
-                            <div class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white
-                                {{ $p['status'] === 'Ready' ? 'bg-green-500' : ($p['status'] === 'Working' ? 'bg-blue-500' : 'bg-gray-300') }}">
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <p class="text-sm font-semibold text-gray-800">{{ $p['nama'] }}</p>
-                        <p class="text-xs text-gray-400">ID: {{ $p['id'] }}</p>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ $p['tugas'] }}</td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-sm font-bold text-gray-800">{{ $p['rating'] }}</span>
-                            <div class="flex text-amber-400 text-xs">
-                                @for($i = 1; $i <= 5; $i++)
-                                    @if($i <= floor($p['rating']))
-                                        <span>★</span>
-                                    @else
-                                        <span class="text-gray-200">★</span>
-                                    @endif
-                                @endfor
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        @if($p['status'] === 'Ready')
-                            <span class="text-xs font-semibold text-green-700 border border-green-300 px-3 py-1 rounded-full">Ready</span>
-                        @elseif($p['status'] === 'Working')
-                            <span class="text-xs font-semibold text-blue-600 border border-blue-300 px-3 py-1 rounded-full">Working</span>
-                        @else
-                            <span class="text-xs font-semibold text-gray-400 border border-gray-200 px-3 py-1 rounded-full">Off</span>
-                        @endif
-                    </td>
-                    <td class="px-6 py-4">
-                        <button class="text-sm font-semibold text-[#064E3B] hover:underline">Detail</button>
-                    </td>
-                </tr>
-                @endforeach
+                @forelse($daftarPetugas as $p)
+<tr class="hover:bg-gray-50/50">
+    <td class="px-6 py-4">
+        <div class="relative w-10 h-10">
+            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                {{ strtoupper(substr($p->name, 0, 2)) }}
+            </div>
+        </div>
+    </td>
+    <td class="px-6 py-4">
+        <p class="text-sm font-semibold text-gray-800">{{ $p->name }}</p>
+        <p class="text-xs text-gray-400">{{ $p->email }}</p>
+    </td>
+    <td class="px-6 py-4 text-sm text-gray-700">-</td>
+    <td class="px-6 py-4">
+        <span class="text-sm font-bold text-gray-800">-</span>
+    </td>
+    <td class="px-6 py-4">
+        <span class="text-xs font-semibold text-green-700 border border-green-300 px-3 py-1 rounded-full">Ready</span>
+    </td>
+    <td class="px-6 py-4">
+        <button class="text-sm font-semibold text-[#064E3B] hover:underline">Detail</button>
+    </td>
+</tr>
+@empty
+<tr>
+    <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-400">Belum ada petugas</td>
+</tr>
+@endforelse
 
             </tbody>
         </table>

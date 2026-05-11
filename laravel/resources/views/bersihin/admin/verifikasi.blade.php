@@ -39,37 +39,32 @@
                 </thead>
                 <tbody class="divide-y divide-gray-50">
 
-                    @php
-                    $antrean = [
-                        ['tanggal' => '24 Okt 2023', 'jam' => '14:30 WIB', 'id' => '#BSN-99201', 'customer' => 'Andi Pratama',  'nominal' => 'Rp 250.000', 'aktif' => true],
-                        ['tanggal' => '24 Okt 2023', 'jam' => '13:15 WIB', 'id' => '#BSN-99185', 'customer' => 'Siti Aminah',   'nominal' => 'Rp 175.000', 'aktif' => false],
-                        ['tanggal' => '24 Okt 2023', 'jam' => '11:00 WIB', 'id' => '#BSN-99172', 'customer' => 'Budi Santoso',  'nominal' => 'Rp 420.000', 'aktif' => false],
-                        ['tanggal' => '24 Okt 2023', 'jam' => '09:50 WIB', 'id' => '#BSN-99160', 'customer' => 'Rina Wijaya',   'nominal' => 'Rp 300.000', 'aktif' => false],
-                    ];
-                    @endphp
-
-                    @foreach($antrean as $item)
-                    <tr class="cursor-pointer {{ $item['aktif'] ? 'bg-emerald-50/50' : 'hover:bg-gray-50/60' }}">
-                        <td class="px-5 py-3.5">
-                            <p class="text-sm text-gray-700 font-medium">{{ $item['tanggal'] }}</p>
-                            <p class="text-xs text-gray-400">{{ $item['jam'] }}</p>
-                        </td>
-                        <td class="px-5 py-3.5">
-                            <span class="text-sm font-bold text-[#064E3B]">{{ $item['id'] }}</span>
-                        </td>
-                        <td class="px-5 py-3.5">
-                            <span class="text-sm text-gray-700">{{ $item['customer'] }}</span>
-                        </td>
-                        <td class="px-5 py-3.5">
-                            <span class="text-sm font-semibold text-gray-800">{{ $item['nominal'] }}</span>
-                        </td>
-                        <td class="px-5 py-3.5">
-                            <span class="text-xs font-semibold text-amber-500 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
-                                ● Pending
-                            </span>
-                        </td>
-                    </tr>
-                    @endforeach
+                    @forelse($antrean as $item)
+<tr class="cursor-pointer hover:bg-gray-50/60">
+    <td class="px-5 py-3.5">
+        <p class="text-sm text-gray-700 font-medium">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</p>
+        <p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</p>
+    </td>
+    <td class="px-5 py-3.5">
+        <span class="text-sm font-bold text-[#064E3B]">#BRS-{{ $item->id }}</span>
+    </td>
+    <td class="px-5 py-3.5">
+        <span class="text-sm text-gray-700">{{ $item->customer_name }}</span>
+    </td>
+    <td class="px-5 py-3.5">
+        <span class="text-sm font-semibold text-gray-800">Rp {{ number_format($item->amount, 0, ',', '.') }}</span>
+    </td>
+    <td class="px-5 py-3.5">
+        <span class="text-xs font-semibold text-amber-500 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+            ● Pending
+        </span>
+    </td>
+</tr>
+@empty
+<tr>
+    <td colspan="5" class="px-5 py-8 text-center text-sm text-gray-400">Tidak ada antrean verifikasi</td>
+</tr>
+@endforelse
 
                 </tbody>
             </table>
