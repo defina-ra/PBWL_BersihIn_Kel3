@@ -1,268 +1,143 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Layanan Kami - BersihIn</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Plus Jakarta Sans', sans-serif; }
-  .filter-btn.active { background: #16a34a; color: white; }
-  .filter-btn { background: transparent; color: #374151; }
-</style>
-</head>
-<body class="bg-gray-50">
+@extends('bersihin.layouts.app')
 
-{{-- NAVBAR --}}
-<nav class="flex items-center justify-between px-16 py-4 bg-white border-b border-gray-100 sticky top-0 z-50">
-  <a href="/bersihin" class="text-green-600 font-bold text-2xl">BersihIn</a>
-  <div class="flex gap-8 text-sm font-medium text-gray-600">
-    <a href="/bersihin/layanan" class="text-green-600 border-b-2 border-green-500 pb-1">Layanan</a>
-    <a href="#" class="hover:text-green-600">Cara Kerja</a>
-    <a href="#" class="hover:text-green-600">Harga</a>
-    <a href="#" class="hover:text-green-600">Ulasan</a>
-  </div>
-  <div class="flex items-center gap-4">
-    <a href="/bersihin/login" class="text-sm text-gray-600 font-medium hover:text-green-600">Login</a>
-    <a href="/bersihin/register" class="bg-green-600 text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-green-700">Get Started</a>
-  </div>
-</nav>
+@section('page-title', 'Layanan Kami')
+@section('page-subtitle', 'Pilih layanan kebersihan sesuai kebutuhan kamu')
 
-{{-- PAGE HEADER --}}
-<section class="px-16 pt-12 pb-8 bg-gray-50">
-  <h1 class="text-4xl font-extrabold text-gray-900 mb-3">Layanan Kami</h1>
-  <p class="text-gray-500 text-base max-w-lg">
-    Pilih layanan kebersihan sesuai kebutuhan rumah Anda. Kami menghadirkan standar "Pristine Sanctuary" ke setiap sudut ruangan.
-  </p>
-</section>
+@section('content')
 
-{{-- FILTER BAR --}}
-<section class="px-16 pb-8 bg-gray-50">
-  <div class="flex items-center justify-between">
-    <div class="flex gap-3">
-      <button class="filter-btn active px-5 py-2 rounded-full text-sm font-semibold border border-green-600">Semua</button>
-      <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border border-gray-200 hover:border-green-400 hover:text-green-600">Harian</button>
-      <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border border-gray-200 hover:border-green-400 hover:text-green-600">Mingguan</button>
-      <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border border-gray-200 hover:border-green-400 hover:text-green-600">Spesial</button>
+@php
+$photos = [
+    'Cuci Sofa'    => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80',
+    'Cuci Karpet'  => 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+    'Bersih Rumah' => 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80',
+    'Cuci AC'      => 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80',
+];
+$gradients = [
+    'Cuci Sofa'    => 'linear-gradient(135deg,#92400e,#b45309)',
+    'Cuci Karpet'  => 'linear-gradient(135deg,#064e3b,#16a34a)',
+    'Bersih Rumah' => 'linear-gradient(135deg,#0f766e,#0d9488)',
+    'Cuci AC'      => 'linear-gradient(135deg,#1e40af,#2563eb)',
+];
+@endphp
+
+<!-- TOMBOL PESAN -->
+<div class="flex justify-between items-center mb-6">
+    <p class="text-gray-400 text-sm">{{ $layanan->count() }} layanan tersedia</p>
+    <a href="/bersihin/booking"
+       class="flex items-center gap-2 text-sm font-bold text-white px-5 py-2.5 rounded-xl transition"
+       style="background:linear-gradient(135deg,#16a34a,#0d9044);box-shadow:0 4px 14px rgba(22,163,74,0.35);">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Pesan Sekarang
+    </a>
+</div>
+
+<!-- GRID LAYANAN -->
+<div class="grid grid-cols-3 gap-5 mb-8">
+    @forelse($layanan as $l)
+    @php
+        $foto = $photos[$l->service_name] ?? 'https://images.unsplash.com/photo-1527515637462-cff94edd787c?w=600&q=80';
+        $grad = $gradients[$l->service_name] ?? 'linear-gradient(135deg,#064e3b,#16a34a)';
+        $jam  = $l->duration >= 60 ? round($l->duration / 60) : 1;
+    @endphp
+    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 hover:-translate-y-1 flex flex-col">
+
+        <!-- FOTO -->
+        <div class="relative overflow-hidden" style="height:190px;background:{{ $grad }};">
+            <img src="{{ $foto }}"
+                 alt="{{ $l->service_name }}"
+                 class="w-full h-full object-cover"
+                 onerror="this.style.display='none'">
+            <!-- badge durasi -->
+            <span class="absolute top-3 left-3 bg-white bg-opacity-90 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                </svg>
+                ± {{ $jam }} Jam
+            </span>
+            <!-- badge harga -->
+            <span class="absolute top-3 right-3 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm" style="background:rgba(0,0,0,0.45);">
+                Rp {{ number_format($l->price, 0, ',', '.') }}
+            </span>
+        </div>
+
+        <!-- KONTEN -->
+        <div class="p-5 flex flex-col flex-1">
+            <h3 class="font-bold text-gray-900 text-base mb-1">{{ $l->service_name }}</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4 flex-1">{{ $l->description }}</p>
+            <a href="/bersihin/booking?service_id={{ $l->id }}"
+               class="block w-full text-center font-bold py-3 rounded-xl text-sm transition text-white"
+               style="background:linear-gradient(135deg,#16a34a,#0d9044);">
+                Pesan Sekarang →
+            </a>
+        </div>
     </div>
-    <div>
-      <select class="border border-gray-200 text-sm text-gray-600 px-4 py-2 rounded-full bg-white focus:outline-none focus:border-green-400">
-        <option>Urutkan: Harga Terendah</option>
-        <option>Urutkan: Harga Tertinggi</option>
-        <option>Urutkan: Terpopuler</option>
-      </select>
+    @empty
+    <div class="col-span-3 bg-white rounded-2xl border border-gray-100 p-12 text-center">
+        <p class="text-gray-400 text-sm">Belum ada layanan tersedia</p>
     </div>
-  </div>
-</section>
+    @endforelse
+</div>
 
-{{-- SERVICE GRID --}}
-<section class="px-16 pb-16 bg-gray-50">
-  <div class="grid grid-cols-3 gap-6">
+<!-- KENAPA PILIH KAMI -->
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7 mb-6">
+    <h3 class="font-extrabold text-gray-900 text-base mb-5">Kenapa Pilih BersihIn?</h3>
+    <div class="grid grid-cols-4 gap-5">
+        <div class="text-center">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background:#f0fdf4;">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#16a34a" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+            </div>
+            <p class="font-bold text-gray-800 text-sm">Petugas Terverifikasi</p>
+            <p class="text-gray-400 text-xs mt-1">Semua petugas sudah terlatih dan terpercaya</p>
+        </div>
+        <div class="text-center">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background:#eff6ff;">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <p class="font-bold text-gray-800 text-sm">Tepat Waktu</p>
+            <p class="text-gray-400 text-xs mt-1">Petugas datang sesuai jadwal yang kamu pilih</p>
+        </div>
+        <div class="text-center">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background:#fef3c7;">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#d97706" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                </svg>
+            </div>
+            <p class="font-bold text-gray-800 text-sm">Rating Tinggi</p>
+            <p class="text-gray-400 text-xs mt-1">Rata-rata 4.9/5 dari ribuan pelanggan</p>
+        </div>
+        <div class="text-center">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background:#fdf4ff;">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#9333ea" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+            </div>
+            <p class="font-bold text-gray-800 text-sm">Pembayaran Mudah</p>
+            <p class="text-gray-400 text-xs mt-1">Transfer bank, mudah dan aman</p>
+        </div>
+    </div>
+</div>
 
-    {{-- Card 1: Bersih Rutin --}}
-    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-      <div class="relative">
-        <div class="h-52 bg-gray-200 flex items-center justify-center overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" 
-               alt="Bersih Rutin" class="w-full h-full object-cover"
-               onerror="this.parentElement.innerHTML='<div class=\'w-full h-full bg-green-800 flex items-center justify-center\'><span class=\'text-white text-sm\'>Bersih Rutin</span></div>'">
+<!-- BANNER CTA -->
+<div class="rounded-2xl overflow-hidden relative" style="background:linear-gradient(135deg,#0a2e1f,#145c3e);">
+    <div class="p-8 flex items-center justify-between relative z-10">
+        <div>
+            <p class="text-green-400 text-xs font-bold uppercase tracking-widest mb-2">Penawaran Terbatas</p>
+            <h2 class="text-white text-xl font-extrabold mb-2">Diskon 30% untuk Pesanan Pertama!</h2>
+            <p class="text-green-300 text-sm mb-5">Daftar sekarang dan nikmati rumah bersih dengan harga spesial.</p>
+            <a href="/bersihin/booking"
+               class="inline-flex items-center gap-2 bg-white text-green-800 font-bold text-sm px-6 py-3 rounded-xl hover:bg-green-50 transition">
+                Pesan Sekarang →
+            </a>
         </div>
-        <span class="absolute top-3 left-3 bg-white text-gray-600 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 6v6l4 2"/></svg>
-          ± 2 Jam
-        </span>
-      </div>
-      <div class="p-5">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="font-bold text-gray-900 text-lg">Bersih Rutin</h3>
-          <span class="text-green-600 font-bold text-sm">Rp 100.000</span>
-        </div>
-        <p class="text-gray-500 text-sm mb-4 leading-relaxed">Perawatan kebersihan harian untuk menjaga kesegaran ruang tamu, kamar tidur, dan dapur Anda.</p>
-        <a href="/bersihin/booking" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl text-sm transition">
-          Pesan Sekarang
-        </a>
-      </div>
     </div>
+    <div class="absolute -top-8 -right-8 w-40 h-40 rounded-full opacity-10" style="background:white;"></div>
+    <div class="absolute -bottom-6 right-32 w-28 h-28 rounded-full opacity-10" style="background:white;"></div>
+</div>
 
-    {{-- Card 2: Cuci Kasur --}}
-    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-      <div class="relative">
-        <div class="h-52 bg-gray-200 flex items-center justify-center overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80" 
-               alt="Cuci Kasur" class="w-full h-full object-cover"
-               onerror="this.parentElement.innerHTML='<div class=\'w-full h-full bg-blue-800 flex items-center justify-center\'><span class=\'text-white text-sm\'>Cuci Kasur</span></div>'">
-        </div>
-        <span class="absolute top-3 left-3 bg-white text-gray-600 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 6v6l4 2"/></svg>
-          ± 2 Jam
-        </span>
-      </div>
-      <div class="p-5">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="font-bold text-gray-900 text-lg">Cuci Kasur</h3>
-          <span class="text-green-600 font-bold text-sm">Rp 150.000</span>
-        </div>
-        <p class="text-gray-500 text-sm mb-4 leading-relaxed">Eradikasi tungau dan debu dengan teknologi uap panas, memastikan tidur yang lebih sehat dan nyaman.</p>
-        <a href="/bersihin/booking" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl text-sm transition">
-          Pesan Sekarang
-        </a>
-      </div>
-    </div>
-
-    {{-- Card 3: Deep Cleaning --}}
-    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-      <div class="relative">
-        <div class="h-52 bg-gray-200 flex items-center justify-center overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80" 
-               alt="Deep Cleaning" class="w-full h-full object-cover"
-               onerror="this.parentElement.innerHTML='<div class=\'w-full h-full bg-teal-800 flex items-center justify-center\'><span class=\'text-white text-sm\'>Deep Cleaning</span></div>'">
-        </div>
-        <span class="absolute top-3 left-3 bg-white text-gray-600 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 6v6l4 2"/></svg>
-          ± 2 Jam
-        </span>
-      </div>
-      <div class="p-5">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="font-bold text-gray-900 text-lg">Deep Cleaning</h3>
-          <span class="text-green-600 font-bold text-sm">Rp 250.000</span>
-        </div>
-        <p class="text-gray-500 text-sm mb-4 leading-relaxed">Pembersihan menyeluruh hingga sela tersulit, ideal untuk rumah baru atau setelah renovasi besar.</p>
-        <a href="/bersihin/booking" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl text-sm transition">
-          Pesan Sekarang
-        </a>
-      </div>
-    </div>
-
-    {{-- Card 4: Bersih Kamar Mandi --}}
-    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-      <div class="relative">
-        <div class="h-52 bg-gray-200 flex items-center justify-center overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&q=80" 
-               alt="Bersih Kamar Mandi" class="w-full h-full object-cover"
-               onerror="this.parentElement.innerHTML='<div class=\'w-full h-full bg-cyan-800 flex items-center justify-center\'><span class=\'text-white text-sm\'>Bersih Kamar Mandi</span></div>'">
-        </div>
-        <span class="absolute top-3 left-3 bg-white text-gray-600 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 6v6l4 2"/></svg>
-          ± 2 Jam
-        </span>
-      </div>
-      <div class="p-5">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="font-bold text-gray-900 text-lg">Bersih Kamar Mandi</h3>
-          <span class="text-green-600 font-bold text-sm">Rp 120.000</span>
-        </div>
-        <p class="text-gray-500 text-sm mb-4 leading-relaxed">Menghilangkan kerak air dan jamur hingga bersih sempurna, kamar mandi kembali seperti baru.</p>
-        <a href="/bersihin/booking" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl text-sm transition">
-          Pesan Sekarang
-        </a>
-      </div>
-    </div>
-
-    {{-- Card 5: Cuci Sofa --}}
-    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-      <div class="relative">
-        <div class="h-52 bg-gray-200 flex items-center justify-center overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80" 
-               alt="Cuci Sofa" class="w-full h-full object-cover"
-               onerror="this.parentElement.innerHTML='<div class=\'w-full h-full bg-amber-800 flex items-center justify-center\'><span class=\'text-white text-sm\'>Cuci Sofa</span></div>'">
-        </div>
-        <span class="absolute top-3 left-3 bg-white text-gray-600 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 6v6l4 2"/></svg>
-          ± 2 Jam
-        </span>
-      </div>
-      <div class="p-5">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="font-bold text-gray-900 text-lg">Cuci Sofa</h3>
-          <span class="text-green-600 font-bold text-sm">Rp 180.000</span>
-        </div>
-        <p class="text-gray-500 text-sm mb-4 leading-relaxed">Pembersihan noda dan aroma tak sedap pada sofa dengan metode deep foam cleaning profesional.</p>
-        <a href="/bersihin/booking" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl text-sm transition">
-          Pesan Sekarang
-        </a>
-      </div>
-    </div>
-
-    {{-- Card 6: Cuci Jendela --}}
-    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-      <div class="relative">
-        <div class="h-52 bg-gray-200 flex items-center justify-center overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1527515637462-cff94edd787c?w=600&q=80" 
-               alt="Cuci Jendela" class="w-full h-full object-cover"
-               onerror="this.parentElement.innerHTML='<div class=\'w-full h-full bg-sky-800 flex items-center justify-center\'><span class=\'text-white text-sm\'>Cuci Jendela</span></div>'">
-        </div>
-        <span class="absolute top-3 left-3 bg-white text-gray-600 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 6v6l4 2"/></svg>
-          ± 2 Jam
-        </span>
-      </div>
-      <div class="p-5">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="font-bold text-gray-900 text-lg">Cuci Jendela</h3>
-          <span class="text-green-600 font-bold text-sm">Rp 90.000</span>
-        </div>
-        <p class="text-gray-500 text-sm mb-4 leading-relaxed">Kaca bening tanpa noda untuk pemandangan luar yang lebih indah dan cahaya masuk maksimal.</p>
-        <a href="/bersihin/booking" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl text-sm transition">
-          Pesan Sekarang
-        </a>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-{{-- FOOTER --}}
-<footer class="px-16 py-12 bg-white border-t border-gray-100">
-  <div class="flex justify-between gap-8">
-    <div class="max-w-xs">
-      <h3 class="text-green-600 font-bold text-xl mb-3">BersihIn</h3>
-      <p class="text-gray-400 text-sm leading-relaxed mb-4">Mewujudkan "The Pristine Sanctuary" di setiap rumah melalui layanan kebersihan profesional dan terpercaya.</p>
-      <div class="flex gap-3">
-        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center cursor-pointer hover:bg-green-50">
-          <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </div>
-        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center cursor-pointer hover:bg-green-50">
-          <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
-        </div>
-        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center cursor-pointer hover:bg-green-50">
-          <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-        </div>
-      </div>
-    </div>
-    <div>
-      <h4 class="font-bold text-gray-800 mb-4 text-sm">Layanan Kami</h4>
-      <div class="flex flex-col gap-2 text-gray-400 text-sm">
-        <a href="#" class="hover:text-green-600">Pembersihan Rutin</a>
-        <a href="#" class="hover:text-green-600">Deep Cleaning</a>
-        <a href="#" class="hover:text-green-600">Cuci Kasur & Sofa</a>
-        <a href="#" class="hover:text-green-600">Bersih Kamar Mandi</a>
-      </div>
-    </div>
-    <div>
-      <h4 class="font-bold text-gray-800 mb-4 text-sm">Perusahaan</h4>
-      <div class="flex flex-col gap-2 text-gray-400 text-sm">
-        <a href="#" class="hover:text-green-600">Tentang Kami</a>
-        <a href="#" class="hover:text-green-600">Karier</a>
-        <a href="#" class="hover:text-green-600">Hubungi Kami</a>
-        <a href="#" class="hover:text-green-600">Pusat Bantuan</a>
-      </div>
-    </div>
-    <div>
-      <h4 class="font-bold text-gray-800 mb-4 text-sm">Legal</h4>
-      <div class="flex flex-col gap-2 text-gray-400 text-sm">
-        <a href="#" class="hover:text-green-600">Kebijakan Privasi</a>
-        <a href="#" class="hover:text-green-600">Syarat & Ketentuan</a>
-        <a href="#" class="hover:text-green-600">Cookies</a>
-      </div>
-    </div>
-  </div>
-  <div class="border-t border-gray-100 mt-10 pt-6 flex justify-between items-center">
-    <p class="text-gray-400 text-xs">© 2024 BersihIn. The Pristine Sanctuary.</p>
-    <p class="text-gray-400 text-xs">Bahasa Indonesia · IDR - Rupiah</p>
-  </div>
-</footer>
-
-</body>
-</html>
+@endsection

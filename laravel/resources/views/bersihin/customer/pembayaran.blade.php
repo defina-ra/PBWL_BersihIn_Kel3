@@ -1,199 +1,113 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pembayaran - BersihIn</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Plus Jakarta Sans', sans-serif; }
-</style>
-</head>
-<body class="bg-gray-50">
+@extends('bersihin.layouts.app')
+@section('page-title', 'Konfirmasi & Pembayaran')
+@section('page-subtitle', 'Selesaikan pembayaran pesanan kamu')
 
-{{-- NAVBAR --}}
-<nav class="flex items-center justify-between px-16 py-4 bg-white border-b border-gray-100 sticky top-0 z-50">
-  <a href="/bersihin" class="text-green-600 font-bold text-2xl">BersihIn</a>
-  <div class="flex gap-8 text-sm font-medium text-gray-600">
-    <a href="/bersihin/layanan" class="hover:text-green-600">Layanan</a>
-    <a href="#" class="hover:text-green-600">Cara Kerja</a>
-    <a href="#" class="hover:text-green-600">Harga</a>
-    <a href="#" class="hover:text-green-600">Ulasan</a>
-  </div>
-  <div class="flex items-center gap-4">
-    <a href="/bersihin/register" class="bg-green-600 text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-green-700">Get Started</a>
-  </div>
-</nav>
+@section('content')
+<div class="space-y-5 pb-6">
 
-{{-- BREADCRUMB --}}
-<div class="px-16 py-4 bg-gray-50">
-  <p class="text-sm text-gray-400">
-    <a href="/bersihin" class="hover:text-green-600">Beranda</a>
-    <span class="mx-2">›</span>
-    <a href="/bersihin/layanan" class="hover:text-green-600">Layanan</a>
-    <span class="mx-2">›</span>
-    <a href="/bersihin/booking" class="hover:text-green-600">Booking</a>
-    <span class="mx-2">›</span>
-    <span class="text-gray-800 font-bold">Pembayaran</span>
-  </p>
-</div>
-
-{{-- PROGRESS STEPS --}}
-<div class="px-16 py-6 bg-gray-50">
-  <div class="flex items-center justify-center max-w-xl mx-auto">
-    {{-- Step 1 --}}
-    <div class="flex flex-col items-center gap-2">
-      <div class="w-9 h-9 bg-green-600 rounded-full flex items-center justify-center">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-width="2.5" d="M5 13l4 4L19 7"/>
-        </svg>
-      </div>
-      <span class="text-xs text-gray-500">Pilih Layanan</span>
-    </div>
-    <div class="flex-1 h-0.5 bg-green-600 mb-5"></div>
-    {{-- Step 2 --}}
-    <div class="flex flex-col items-center gap-2">
-      <div class="w-9 h-9 bg-green-600 rounded-full flex items-center justify-center">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-width="2.5" d="M5 13l4 4L19 7"/>
-        </svg>
-      </div>
-      <span class="text-xs text-gray-500">Isi Data</span>
-    </div>
-    <div class="flex-1 h-0.5 bg-green-600 mb-5"></div>
-    {{-- Step 3 --}}
-    <div class="flex flex-col items-center gap-2">
-      <div class="w-9 h-9 bg-green-600 rounded-full flex items-center justify-center ring-4 ring-green-200">
-        <div class="w-3 h-3 bg-white rounded-full"></div>
-      </div>
-      <span class="text-xs text-green-600 font-bold">Pembayaran</span>
-    </div>
-  </div>
-</div>
-
-{{-- PAGE TITLE --}}
-<div class="px-16 pb-6">
-  <h1 class="text-3xl font-extrabold text-gray-900">Konfirmasi & Pembayaran</h1>
-</div>
-
-{{-- MAIN CONTENT --}}
-<section class="px-16 pb-16">
-  <div class="flex gap-8 max-w-5xl">
-
-    {{-- LEFT: PAYMENT --}}
-    <div class="flex-1">
-
-      {{-- Metode Pembayaran --}}
-      <div class="bg-white rounded-2xl border-2 border-green-500 p-5 mb-4 flex items-center justify-between">
-        <div>
-          <p class="font-bold text-gray-800 text-sm">Transfer Bank</p>
-          <p class="text-gray-400 text-xs mt-0.5">Lakukan pembayaran manual</p>
+    {{-- Step Indicator --}}
+    <div class="flex items-center gap-0 mb-4">
+        <div class="flex items-center gap-2 text-xs font-semibold text-green-600">
+            <div class="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-white text-xs">✓</div>
+            <span>Booking</span>
         </div>
-        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-width="2.5" d="M5 13l4 4L19 7"/>
-        </svg>
-      </div>
+        <div class="flex-1 h-0.5 bg-green-500 mx-2"></div>
+        <div class="flex items-center gap-2 text-xs font-semibold text-blue-600">
+            <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs">2</div>
+            <span>Pembayaran</span>
+        </div>
+        <div class="flex-1 h-0.5 bg-gray-200 mx-2"></div>
+        <div class="flex items-center gap-2 text-xs font-semibold text-gray-400">
+            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">3</div>
+            <span>Selesai</span>
+        </div>
+    </div>
 
-      {{-- Transfer Detail --}}
-      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+    <div class="flex gap-6">
 
-        <h3 class="font-bold text-gray-800 mb-4">Transfer ke Rekening</h3>
+        {{-- KIRI: PEMBAYARAN --}}
+        <div class="flex-1">
 
-        {{-- Rekening Box --}}
-        <div class="bg-green-50 rounded-xl p-4 mb-4">
-          <p class="font-bold text-gray-800 text-sm">BCA</p>
-          <p class="text-gray-700 text-sm mt-1">1234-5678-9012</p>
-          <p class="text-gray-500 text-sm">a.n BersihIn Indonesia</p>
+            {{-- Metode --}}
+            <div class="bg-white rounded-2xl border-2 border-green-500 p-5 mb-4 flex items-center justify-between">
+                <div>
+                    <p class="font-bold text-gray-800 text-sm">Transfer Bank</p>
+                    <p class="text-gray-400 text-xs mt-0.5">Lakukan pembayaran manual</p>
+                </div>
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+
+            {{-- Detail Transfer --}}
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                <h3 class="font-bold text-gray-800 mb-4">Transfer ke Rekening</h3>
+                <div class="bg-green-50 rounded-xl p-4 mb-4">
+                    <p class="font-bold text-gray-800 text-sm">BCA</p>
+                    <p class="text-gray-700 text-sm mt-1">1234-5678-9012</p>
+                    <p class="text-gray-500 text-sm">a.n BersihIn Indonesia</p>
+                </div>
+                <button onclick="navigator.clipboard.writeText('1234567890 12');this.innerText='Tersalin!';setTimeout(()=>this.innerText='Salin Nomor Rekening',2000)"
+                    class="border border-green-500 text-green-600 text-sm font-semibold px-4 py-2 rounded-full hover:bg-green-50 transition mb-6">
+                    Salin Nomor Rekening
+                </button>
+
+                <h3 class="font-bold text-gray-800 mb-3">Upload Bukti</h3>
+                <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 mb-4">
+                    <input type="file" class="w-full text-sm text-gray-500">
+                </div>
+                <textarea rows="2" placeholder="Catatan (opsional)"
+                    class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-500 resize-none focus:outline-none focus:border-green-500 mb-4"></textarea>
+               <form method="POST" action="/bersihin/pembayaran" enctype="multipart/form-data">
+    @csrf
+    <input type="hidden" name="booking_id" value="{{ $booking->id ?? '' }}">
+    
+    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl text-base transition mb-3">
+        Kirim Bukti
+    </button>
+</form>
+                <p class="text-amber-500 text-sm font-medium">Status: Menunggu upload</p>
+            </div>
         </div>
 
-        {{-- Tombol Salin --}}
-        <button 
-          onclick="navigator.clipboard.writeText('1234567890 12');this.innerText='Tersalin!';setTimeout(()=>this.innerText='Salin Nomor Rekening',2000)"
-          class="border border-green-500 text-green-600 text-sm font-semibold px-4 py-2 rounded-full hover:bg-green-50 transition mb-6"
-        >
-          Salin Nomor Rekening
-        </button>
-
-        {{-- Upload Bukti --}}
-        <h3 class="font-bold text-gray-800 mb-3">Upload Bukti</h3>
-        <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 mb-4">
-          <input type="file" class="w-full text-sm text-gray-500">
+        {{-- KANAN: RINGKASAN --}}
+        <div class="w-72 flex-shrink-0">
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="h-40 bg-emerald-50 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                </div>
+                <div class="p-5">
+                    @if($booking)
+                    <h3 class="font-bold text-gray-900 text-lg mb-1">{{ $booking->service_name }}</h3>
+                    <div class="space-y-2 border-t border-gray-100 pt-4 mt-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">Tanggal</span>
+                            <span class="text-gray-800 font-medium">{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">Waktu</span>
+                            <span class="text-gray-800 font-medium">{{ $booking->booking_time }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">Alamat</span>
+                            <span class="text-gray-800 font-medium text-right max-w-32">{{ Str::limit($booking->address, 30) }}</span>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-100 mt-4 pt-4">
+                        <div class="flex justify-between font-bold">
+                            <span class="text-gray-700">Total</span>
+                            <span class="text-green-600">Rp {{ number_format($booking->price, 0, ',', '.') }}</span>
+                        </div>
+                    </div>
+                    @else
+                    <p class="text-gray-400 text-sm text-center py-4">Data pesanan tidak ditemukan</p>
+                    @endif
+                </div>
+            </div>
         </div>
 
-        {{-- Catatan --}}
-        <textarea
-          rows="2"
-          placeholder="Catatan (opsional)"
-          class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-500 resize-none focus:outline-none focus:border-green-500 mb-4"
-        ></textarea>
-
-        {{-- Tombol Kirim --}}
-        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl text-base transition mb-3">
-          Kirim Bukti
-        </button>
-
-        {{-- Status --}}
-        <p class="text-amber-500 text-sm font-medium">Status: Menunggu upload</p>
-
-      </div>
     </div>
-
-    {{-- RIGHT: ORDER SUMMARY --}}
-    <div class="w-80 flex-shrink-0">
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-        {{-- Gambar --}}
-       <div class="h-48 bg-gray-200 overflow-hidden">
-  <img 
-    src="/images/Pembayaran.png"
-    alt="Deep Cleaning"
-    class="w-full h-full object-cover"
-  >
 </div>
-        {{-- Detail Pesanan --}}
-        <div class="p-5">
-          <h3 class="font-bold text-gray-900 text-lg mb-1">Deep Cleaning</h3>
-          <p class="text-gray-400 text-sm mb-4">Layanan kebersihan menyeluruh</p>
-
-          <div class="space-y-3 border-t border-gray-100 pt-4">
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-500">Tanggal</span>
-              <span class="text-gray-800 font-medium">25 Januari 2025</span>
-            </div>
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-500">Alamat</span>
-              <span class="text-gray-800 font-medium">Bandar Lampung</span>
-            </div>
-          </div>
-
-          <div class="border-t border-gray-100 mt-4 pt-4 space-y-2">
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-500">Harga</span>
-              <span class="text-gray-700">Rp 250.000</span>
-            </div>
-            <div class="flex justify-between text-sm font-bold">
-              <span class="text-green-600">Total: Rp 250.000</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-{{-- FOOTER --}}
-<footer class="px-16 py-8 bg-white border-t border-gray-100">
-  <div class="flex justify-between items-center">
-    <h3 class="text-gray-800 font-bold text-lg">Pristine Sanctuary</h3>
-    <div class="flex gap-6 text-gray-400 text-sm">
-      <a href="#" class="hover:text-green-600">Privacy Policy</a>
-      <a href="#" class="hover:text-green-600">Terms of Service</a>
-      <a href="#" class="hover:text-green-600">Help Center</a>
-    </div>
-    <p class="text-gray-400 text-xs">© 2024 The Pristine Sanctuary. Renewal in every corner.</p>
-  </div>
-</footer>
-
-</body>
-</html
+@endsection

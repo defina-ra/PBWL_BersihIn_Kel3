@@ -25,12 +25,12 @@
 </head>
 <body class="bg-white">
 
-{{-- ===================== NAVBAR ===================== --}}
+
 <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
   <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
     <a href="/bersihin" class="font-display text-xl font-extrabold text-green-700 tracking-tight">BersihIn</a>
 
-    {{-- Desktop links --}}
+    
     <div class="hidden md:flex gap-7 text-sm font-medium text-gray-500">
       <a href="#layanan" class="hover:text-green-600 transition">Layanan</a>
       <a href="#cara-kerja" class="hover:text-green-600 transition">Cara Kerja</a>
@@ -38,20 +38,20 @@
       <a href="#ulasan" class="hover:text-green-600 transition">Ulasan</a>
     </div>
 
-    {{-- Desktop CTA --}}
+    
     <div class="hidden md:flex items-center gap-3">
       <a href="/bersihin/login" class="text-sm text-gray-600 font-medium hover:text-green-600 transition">Masuk</a>
       <a href="/bersihin/register" class="bg-green-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-green-700 transition">Daftar Gratis</a>
     </div>
 
-    {{-- Hamburger --}}
+    
     <button onclick="toggleMenu()" class="md:hidden p-2 rounded-lg hover:bg-gray-50 transition">
       <svg id="icon-burger" class="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
       <svg id="icon-close" class="w-6 h-6 text-gray-700 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
   </div>
 
-  {{-- Mobile dropdown --}}
+  
   <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-100">
     <div class="max-w-6xl mx-auto px-6 pb-4 pt-2 flex flex-col gap-1">
       <a href="#layanan" onclick="closeMenu()" class="py-2.5 text-sm font-medium text-gray-700 hover:text-green-600 border-b border-gray-50 flex items-center justify-between">Layanan <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a>
@@ -66,7 +66,7 @@
   </div>
 </nav>
 
-{{-- ===================== HERO ===================== --}}
+
 <section class="max-w-6xl mx-auto px-6 py-12 md:py-20">
   <div class="flex flex-col md:flex-row md:items-center gap-10 md:gap-16">
     <div class="flex-1 anim-1">
@@ -121,7 +121,7 @@
   </div>
 </section>
 
-{{-- ===================== FITUR ===================== --}}
+
 <section class="bg-gray-50 px-6 py-14">
   <div class="max-w-6xl mx-auto">
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-5">
@@ -160,7 +160,7 @@
   </div>
 </section>
 
-{{-- ===================== LAYANAN ===================== --}}
+
 <section id="layanan" class="px-6 py-16 bg-white">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-10">
@@ -216,7 +216,7 @@
   </div>
 </section>
 
-{{-- ===================== CARA KERJA ===================== --}}
+
 <section id="cara-kerja" class="px-6 py-16 bg-gray-50">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-12">
@@ -266,7 +266,7 @@
   </div>
 </section>
 
-{{-- ===================== HARGA ===================== --}}
+
 <section id="harga" class="px-6 py-16 bg-white">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-12">
@@ -325,7 +325,7 @@
   </div>
 </section>
 
-{{-- ===================== TESTIMONI ===================== --}}
+
 <section id="ulasan" class="px-6 py-16 bg-gray-50">
   <div class="max-w-6xl mx-auto">
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
@@ -372,7 +372,7 @@
   </div>
 </section>
 
-{{-- ===================== CTA BOTTOM ===================== --}}
+
 <section class="px-6 py-16 bg-green-600">
   <div class="max-w-2xl mx-auto text-center">
     <h2 class="font-display text-3xl md:text-4xl font-extrabold text-white mb-4">Siap Punya Rumah yang Bersih?</h2>
@@ -384,7 +384,7 @@
   </div>
 </section>
 
-{{-- ===================== FOOTER ===================== --}}
+
 <footer class="px-6 py-12 bg-white border-t border-gray-100">
   <div class="max-w-6xl mx-auto">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
@@ -443,4 +443,4 @@
   }
 </script>
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\prak-web-lanjut-2407051023\PBWL_BersihIn_Kel3\laravel\resources\views/bersihin/customer/landing.blade.php ENDPATH**/ ?>

@@ -48,9 +48,37 @@ Route::post('/bersihin/login', function () {
 Route::get('/bersihin/register', function () {
     return view('bersihin.auth.register');
 });
+Route::post('/bersihin/register', function () {
+    $data = request()->validate([
+        'name'     => 'required|string|max:255',
+        'email'    => 'required|email|unique:users,email',
+        'phone'    => 'nullable|string|max:20',
+        'password' => 'required|min:8',
+    ]);
+
+    $user = \App\Models\User::create([
+    'name'     => $data['name'],
+    'email'    => $data['email'],
+    'phone'    => $data['phone'] ?? null,
+    'password' => bcrypt($data['password']),
+]);
+
+    $user->assignRole('customer');
+
+    Auth::login($user);
+    request()->session()->regenerate();
+
+    return redirect('/bersihin/customer/dashboard')
+        ->with('success', 'Selamat datang di BersihIn! 🎉');
+});
 
 Route::get('/bersihin/lupa-password', function () {
     return view('bersihin.auth.lupa-password');
+});
+
+// ===== LANDING PAGE - Bisa diakses tanpa login =====
+Route::get('/bersihin', function () {
+    return view('bersihin.customer.landing');
 });
 
 // ===== ADMIN ONLY =====
@@ -174,9 +202,6 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
 
 // ===== CUSTOMER ONLY =====
 Route::middleware(['auth', 'role:customer'])->group(function () {
-    Route::get('/bersihin', function () {
-        return view('bersihin.customer.landing');
-    });
 
     Route::get('/bersihin/customer/dashboard', function () {
         $user = \Auth::user();
@@ -224,7 +249,6 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
         return view('bersihin.customer.layanan', compact('layanan'));
     });
 
-    // Booking - GET
     Route::get('/bersihin/booking', function () {
         $serviceId = request('service_id');
         $service = null;
@@ -235,10 +259,8 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
         return view('bersihin.customer.booking', compact('service', 'layanan'));
     });
 
-    // Booking - POST (submit)
     Route::post('/bersihin/booking', function () {
         $user = \Auth::user();
-
         $bookingId = \DB::table('bookings')->insertGetId([
             'user_id'      => $user->id,
             'service_id'   => request('service_id'),
@@ -250,11 +272,9 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
             'created_at'   => now(),
             'updated_at'   => now(),
         ]);
-
         return redirect('/bersihin/pembayaran?booking_id=' . $bookingId);
     });
 
-    // Pembayaran - GET
     Route::get('/bersihin/pembayaran', function () {
         $bookingId = request('booking_id');
         $booking = null;
@@ -269,7 +289,47 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
         return view('bersihin.customer.pembayaran', compact('booking'));
     });
 
-    // Ulasan - GET
+    Route::post('/bersihin/pembayaran', function () {
+        $bookingId = request('booking_id');
+        $payment = \DB::table('payments')->where('booking_id', $bookingId)->first();
+
+        if ($payment) {
+            \DB::table('payments')
+                ->where('booking_id', $bookingId)
+                ->update([
+                    'payment_status' => 'paid',
+                    'payment_date'   => now(),
+                    'updated_at'     => now(),
+                ]);
+        } else {
+            $booking = \DB::table('bookings')
+                ->join('services', 'bookings.service_id', '=', 'services.id')
+                ->where('bookings.id', $bookingId)
+                ->select('services.price')
+                ->first();
+
+            \DB::table('payments')->insert([
+                'booking_id'     => $bookingId,
+                'amount'         => $booking->price ?? 0,
+                'payment_method' => 'transfer',
+                'payment_status' => 'paid',
+                'payment_date'   => now(),
+                'created_at'     => now(),
+                'updated_at'     => now(),
+            ]);
+        }
+
+        \DB::table('bookings')
+            ->where('id', $bookingId)
+            ->update([
+                'status'     => 'confirmed',
+                'updated_at' => now(),
+            ]);
+
+        return redirect('/bersihin/customer/pesanan')
+            ->with('success', 'Pembayaran berhasil dikirim! ✅');
+    });
+
     Route::get('/bersihin/customer/ulasan', function () {
         $bookingId = request('booking_id');
         $booking = null;
@@ -285,11 +345,9 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
         return view('bersihin.customer.ulasan', compact('booking'));
     });
 
-    // Ulasan - POST (submit)
     Route::post('/bersihin/customer/ulasan', function () {
         $user = \Auth::user();
         $bookingId = request('booking_id');
-
         $booking = \DB::table('bookings')
             ->where('id', $bookingId)
             ->where('user_id', $user->id)

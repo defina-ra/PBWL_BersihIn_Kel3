@@ -1,12 +1,10 @@
-@extends('bersihin.layouts.app')
+<?php $__env->startSection('page-title', 'Pesanan Saya'); ?>
+<?php $__env->startSection('page-subtitle', 'Kelola semua pesanan kebersihan kamu'); ?>
 
-@section('page-title', 'Pesanan Saya')
-@section('page-subtitle', 'Kelola semua pesanan kebersihan kamu')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <!-- NOTIFIKASI BUKTI TERKIRIM -->
-@if(session('success'))
+<?php if(session('success')): ?>
 <div class="notif-bukti">
     <div class="notif-bukti-icon">
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
@@ -14,11 +12,11 @@
         </svg>
     </div>
     <div class="notif-bukti-text">
-        <strong>{{ session('success') }}</strong>
+        <strong><?php echo e(session('success')); ?></strong>
         <span>Bukti pembayaran sedang diverifikasi oleh admin. Pesanan kamu akan segera dikonfirmasi.</span>
     </div>
 </div>
-@endif
+<?php endif; ?>
 
 <!-- HEADER -->
 <div class="flex justify-between items-center mb-6">
@@ -41,7 +39,7 @@
         </div>
         <div>
             <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Total</p>
-            <p class="text-xl font-extrabold text-gray-900">{{ $totalPesanan }} <span class="text-sm font-medium text-gray-400">Pesanan</span></p>
+            <p class="text-xl font-extrabold text-gray-900"><?php echo e($totalPesanan); ?> <span class="text-sm font-medium text-gray-400">Pesanan</span></p>
         </div>
     </div>
     <div class="stat-card">
@@ -50,7 +48,7 @@
         </div>
         <div>
             <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Proses</p>
-            <p class="text-xl font-extrabold text-gray-900">{{ $pesananProses }} <span class="text-sm font-medium text-gray-400">Aktif</span></p>
+            <p class="text-xl font-extrabold text-gray-900"><?php echo e($pesananProses); ?> <span class="text-sm font-medium text-gray-400">Aktif</span></p>
         </div>
     </div>
     <div class="stat-card">
@@ -59,7 +57,7 @@
         </div>
         <div>
             <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Selesai</p>
-            <p class="text-xl font-extrabold text-gray-900">{{ $pesananSelesai }} <span class="text-sm font-medium text-gray-400">Layanan</span></p>
+            <p class="text-xl font-extrabold text-gray-900"><?php echo e($pesananSelesai); ?> <span class="text-sm font-medium text-gray-400">Layanan</span></p>
         </div>
     </div>
     <div class="stat-card">
@@ -83,84 +81,85 @@
 
 <!-- ORDER CARDS -->
 <div class="space-y-4">
-    @forelse($pesanan as $p)
-    <div class="order-card" data-status="{{ $p->status === 'done' ? 'selesai' : ($p->status === 'pending' ? 'pending' : 'proses') }}">
+    <?php $__empty_1 = true; $__currentLoopData = $pesanan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+    <div class="order-card" data-status="<?php echo e($p->status === 'done' ? 'selesai' : ($p->status === 'pending' ? 'pending' : 'proses')); ?>">
         <div class="p-6">
             <div class="flex justify-between items-start mb-3">
                 <div>
                     <div class="flex items-center gap-2 mb-1">
-                        <h3 class="font-bold text-gray-900 text-base">{{ $p->service_name }}</h3>
-                        @if($p->status === 'done')
+                        <h3 class="font-bold text-gray-900 text-base"><?php echo e($p->service_name); ?></h3>
+                        <?php if($p->status === 'done'): ?>
                             <span class="badge" style="background:#dcfce7;color:#15803d;">✓ SELESAI</span>
-                        @elseif($p->status === 'pending')
+                        <?php elseif($p->status === 'pending'): ?>
                             <span class="badge-menunggu">Menunggu Verifikasi</span>
-                        @elseif($p->status === 'confirmed')
+                        <?php elseif($p->status === 'confirmed'): ?>
                             <span class="badge" style="background:#dbeafe;color:#1d4ed8;">CONFIRMED</span>
-                        @elseif($p->status === 'progress')
+                        <?php elseif($p->status === 'progress'): ?>
                             <span class="badge" style="background:#fef3c7;color:#b45309;">PROSES</span>
-                        @else
-                            <span class="badge" style="background:#fee2e2;color:#dc2626;">{{ strtoupper($p->status) }}</span>
-                        @endif
+                        <?php else: ?>
+                            <span class="badge" style="background:#fee2e2;color:#dc2626;"><?php echo e(strtoupper($p->status)); ?></span>
+                        <?php endif; ?>
                     </div>
                     <p class="text-xs text-gray-400">
-                        {{ \Carbon\Carbon::parse($p->booking_date)->format('d M Y') }} &bull;
-                        {{ $p->booking_time }} &bull;
-                        <span class="font-mono bg-gray-100 px-1.5 py-0.5 rounded">#BRS-{{ $p->id }}</span>
+                        <?php echo e(\Carbon\Carbon::parse($p->booking_date)->format('d M Y')); ?> &bull;
+                        <?php echo e($p->booking_time); ?> &bull;
+                        <span class="font-mono bg-gray-100 px-1.5 py-0.5 rounded">#BRS-<?php echo e($p->id); ?></span>
                     </p>
                 </div>
-                <p class="text-lg font-extrabold text-green-700">Rp {{ number_format($p->price, 0, ',', '.') }}</p>
+                <p class="text-lg font-extrabold text-green-700">Rp <?php echo e(number_format($p->price, 0, ',', '.')); ?></p>
             </div>
 
             <!-- INFO MENUNGGU VERIFIKASI -->
-            @if($p->status === 'pending')
+            <?php if($p->status === 'pending'): ?>
             <div class="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-4 text-xs text-amber-700 font-medium">
                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
                 Bukti pembayaran sedang diverifikasi admin. Harap tunggu konfirmasi.
             </div>
-            @endif
+            <?php endif; ?>
 
             <div class="flex items-center gap-5 mb-4">
                 <div class="flex items-center gap-1.5 text-xs text-gray-500">
                     <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    {{ Str::limit($p->address, 40) }}
+                    <?php echo e(Str::limit($p->address, 40)); ?>
+
                 </div>
             </div>
 
             <div class="flex justify-between items-center border-t border-gray-100 pt-4">
                 <div>
-                    @if($p->petugas_name)
-                    <p class="text-xs text-gray-500">Petugas: <span class="font-semibold text-gray-700">{{ $p->petugas_name }}</span></p>
-                    @else
+                    <?php if($p->petugas_name): ?>
+                    <p class="text-xs text-gray-500">Petugas: <span class="font-semibold text-gray-700"><?php echo e($p->petugas_name); ?></span></p>
+                    <?php else: ?>
                     <p class="text-xs text-gray-400">Petugas belum ditugaskan</p>
-                    @endif
+                    <?php endif; ?>
                 </div>
                 <div class="flex gap-2">
                     <button class="btn-outline">Lihat Detail</button>
-                    @if($p->status === 'done')
-                    <a href="/bersihin/customer/ulasan?booking_id={{ $p->id }}" class="btn-solid" style="background:linear-gradient(135deg,#f59e0b,#d97706);text-decoration:none;display:inline-flex;align-items:center;">
+                    <?php if($p->status === 'done'): ?>
+                    <a href="/bersihin/customer/ulasan?booking_id=<?php echo e($p->id); ?>" class="btn-solid" style="background:linear-gradient(135deg,#f59e0b,#d97706);text-decoration:none;display:inline-flex;align-items:center;">
                         Beri Ulasan ★
                     </a>
-                    @elseif(in_array($p->status, ['confirmed', 'progress']))
+                    <?php elseif(in_array($p->status, ['confirmed', 'progress'])): ?>
                     <button class="btn-solid">Hubungi Petugas</button>
-                    @elseif($p->status === 'pending')
-                    <a href="/bersihin/pembayaran?booking_id={{ $p->id }}" class="btn-outline" style="border-color:#f59e0b;color:#b45309;">
+                    <?php elseif($p->status === 'pending'): ?>
+                    <a href="/bersihin/pembayaran?booking_id=<?php echo e($p->id); ?>" class="btn-outline" style="border-color:#f59e0b;color:#b45309;">
                         Lihat Pembayaran
                     </a>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
-    @empty
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
     <div class="bg-white rounded-2xl border border-gray-100 p-12 text-center">
         <p class="text-gray-400 text-sm mb-3">Belum ada pesanan</p>
         <a href="/bersihin/booking" class="inline-block bg-[#064E3B] text-white font-bold px-6 py-3 rounded-xl text-sm hover:bg-emerald-800 transition">
             Pesan Layanan Sekarang
         </a>
     </div>
-    @endforelse
+    <?php endif; ?>
 </div>
 
 <!-- BANNER PROMO -->
@@ -192,4 +191,5 @@ function filterTab(btn, status) {
 }
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('bersihin.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\prak-web-lanjut-2407051023\PBWL_BersihIn_Kel3\laravel\resources\views/bersihin/customer/pesanan.blade.php ENDPATH**/ ?>
