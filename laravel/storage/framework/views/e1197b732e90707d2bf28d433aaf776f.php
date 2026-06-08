@@ -1,32 +1,31 @@
-@extends('bersihin.layouts.app')
-@section('page-title', 'Manajemen Petugas')
-@section('page-subtitle', 'Kelola seluruh staf lapangan')
+<?php $__env->startSection('page-title', 'Manajemen Petugas'); ?>
+<?php $__env->startSection('page-subtitle', 'Kelola seluruh staf lapangan'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
-@if(session('success'))
+<?php if(session('success')): ?>
 <div class="notif-bukti mb-4">
     <div class="notif-bukti-icon">
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
         </svg>
     </div>
-    <div class="notif-bukti-text"><strong>{{ session('success') }}</strong></div>
+    <div class="notif-bukti-text"><strong><?php echo e(session('success')); ?></strong></div>
 </div>
-@endif
+<?php endif; ?>
 
-@if(session('error'))
+<?php if(session('error')): ?>
 <div class="bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4 flex items-center gap-3">
     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#dc2626" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
     </svg>
-    <strong class="text-red-700 text-sm">{{ session('error') }}</strong>
+    <strong class="text-red-700 text-sm"><?php echo e(session('error')); ?></strong>
 </div>
-@endif
+<?php endif; ?>
 
 <div class="p-1">
 
-    {{-- HEADER --}}
+    
     <div class="flex items-start justify-between mb-6">
         <div>
             <h1 class="text-xl font-bold text-gray-900">Manajemen Petugas</h1>
@@ -41,7 +40,7 @@
         </button>
     </div>
 
-    {{-- STATS --}}
+    
     <div class="grid grid-cols-2 gap-4 mb-6">
         <div class="bg-white rounded-xl border border-gray-100 px-6 py-5 flex items-center gap-4">
             <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -51,7 +50,7 @@
             </div>
             <div>
                 <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Total Petugas</p>
-                <p class="text-2xl font-bold text-gray-900">{{ $totalPetugas }}</p>
+                <p class="text-2xl font-bold text-gray-900"><?php echo e($totalPetugas); ?></p>
             </div>
         </div>
         <div class="bg-white rounded-xl border border-gray-100 px-6 py-5 flex items-center gap-4">
@@ -67,11 +66,11 @@
         </div>
     </div>
 
-    {{-- TABEL PETUGAS --}}
+    
     <div class="bg-white rounded-xl border border-gray-100">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
             <h2 class="font-bold text-gray-800">Daftar Seluruh Petugas</h2>
-            <span class="text-xs text-gray-400">{{ $totalPetugas }} petugas terdaftar</span>
+            <span class="text-xs text-gray-400"><?php echo e($totalPetugas); ?> petugas terdaftar</span>
         </div>
 
         <table class="w-full">
@@ -85,8 +84,8 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-50">
-                @forelse($daftarPetugas as $p)
-                @php
+                <?php $__empty_1 = true; $__currentLoopData = $daftarPetugas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <?php
                     $tugasSelesai = \DB::table('bookings')
                         ->where('petugas_id', $p->id)
                         ->where('status', 'done')
@@ -95,42 +94,43 @@
                         ->where('petugas_id', $p->id)
                         ->whereIn('status', ['confirmed', 'on_the_way', 'in_progress'])
                         ->count();
-                @endphp
+                ?>
                 <tr class="hover:bg-gray-50/50">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-[#064E3B] rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
-                                {{ strtoupper(substr($p->name, 0, 2)) }}
+                                <?php echo e(strtoupper(substr($p->name, 0, 2))); ?>
+
                             </div>
                             <div>
-                                <p class="text-sm font-semibold text-gray-800">{{ $p->name }}</p>
-                                <p class="text-xs text-gray-400">ID #{{ $p->id }}</p>
+                                <p class="text-sm font-semibold text-gray-800"><?php echo e($p->name); ?></p>
+                                <p class="text-xs text-gray-400">ID #<?php echo e($p->id); ?></p>
                             </div>
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <p class="text-sm text-gray-700">{{ $p->email }}</p>
-                        <p class="text-xs text-gray-400">{{ $p->phone ?? '-' }}</p>
+                        <p class="text-sm text-gray-700"><?php echo e($p->email); ?></p>
+                        <p class="text-xs text-gray-400"><?php echo e($p->phone ?? '-'); ?></p>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="text-sm font-bold text-gray-800">{{ $tugasSelesai }}</span>
+                        <span class="text-sm font-bold text-gray-800"><?php echo e($tugasSelesai); ?></span>
                         <span class="text-xs text-gray-400 ml-1">tugas</span>
-                        @if($tugasAktif > 0)
-                        <p class="text-xs text-amber-500 mt-0.5">{{ $tugasAktif }} sedang berjalan</p>
-                        @endif
+                        <?php if($tugasAktif > 0): ?>
+                        <p class="text-xs text-amber-500 mt-0.5"><?php echo e($tugasAktif); ?> sedang berjalan</p>
+                        <?php endif; ?>
                     </td>
                     <td class="px-6 py-4">
-                        @if($tugasAktif > 0)
+                        <?php if($tugasAktif > 0): ?>
                         <span class="text-xs font-semibold text-amber-600 border border-amber-300 bg-amber-50 px-3 py-1 rounded-full">● Bertugas</span>
-                        @else
+                        <?php else: ?>
                         <span class="text-xs font-semibold text-green-700 border border-green-300 bg-green-50 px-3 py-1 rounded-full">● Ready</span>
-                        @endif
+                        <?php endif; ?>
                     </td>
                     <td class="px-6 py-4">
                         <form method="POST" action="/bersihin/admin/petugas/hapus"
-                            onsubmit="return confirm('Hapus petugas {{ $p->name }}? Tindakan ini tidak bisa dibatalkan.')">
-                            @csrf
-                            <input type="hidden" name="user_id" value="{{ $p->id }}">
+                            onsubmit="return confirm('Hapus petugas <?php echo e($p->name); ?>? Tindakan ini tidak bisa dibatalkan.')">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="user_id" value="<?php echo e($p->id); ?>">
                             <button type="submit"
                                 class="text-xs font-semibold text-red-500 border border-red-200 hover:bg-red-50 px-3 py-1.5 rounded-lg transition">
                                 Hapus
@@ -138,7 +138,7 @@
                         </form>
                     </td>
                 </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="5" class="px-6 py-10 text-center">
                         <p class="text-sm text-gray-400">Belum ada petugas terdaftar</p>
@@ -148,13 +148,13 @@
                         </button>
                     </td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
 </div>
 
-{{-- MODAL TAMBAH PETUGAS (nyambung database) --}}
+
 <div id="modalTambahPetugas"
      class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50"
      onclick="if(event.target===this)this.classList.add('hidden')">
@@ -171,7 +171,7 @@
         </div>
 
         <form method="POST" action="/bersihin/admin/petugas">
-            @csrf
+            <?php echo csrf_field(); ?>
             <div class="px-6 py-5 space-y-4">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap <span class="text-red-400">*</span></label>
@@ -209,4 +209,5 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('bersihin.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\prak-web-lanjut-2407051023\PBWL_BersihIn_Kel3\laravel\resources\views/bersihin/admin/petugas.blade.php ENDPATH**/ ?>

@@ -1,10 +1,9 @@
-@extends('bersihin.layouts.app')
-@section('page-title', 'Verifikasi Pembayaran')
-@section('page-subtitle', 'Kelola dan verifikasi bukti transfer pelanggan')
+<?php $__env->startSection('page-title', 'Verifikasi Pembayaran'); ?>
+<?php $__env->startSection('page-subtitle', 'Kelola dan verifikasi bukti transfer pelanggan'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
-@if(session('success'))
+<?php if(session('success')): ?>
 <div class="notif-bukti mb-4">
     <div class="notif-bukti-icon">
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
@@ -12,35 +11,35 @@
         </svg>
     </div>
     <div class="notif-bukti-text">
-        <strong>{{ session('success') }}</strong>
+        <strong><?php echo e(session('success')); ?></strong>
     </div>
 </div>
-@endif
+<?php endif; ?>
 
-@if(session('error'))
+<?php if(session('error')): ?>
 <div class="bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4 flex items-center gap-3">
     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#dc2626" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
     </svg>
-    <strong class="text-red-700 text-sm">{{ session('error') }}</strong>
+    <strong class="text-red-700 text-sm"><?php echo e(session('error')); ?></strong>
 </div>
-@endif
+<?php endif; ?>
 
 <div class="flex gap-5">
 
-    {{-- KOLOM KIRI --}}
+    
     <div class="flex-1">
         <div class="mb-5">
             <h1 class="text-xl font-bold text-gray-900">Verifikasi Pembayaran</h1>
             <p class="text-sm text-gray-400 mt-0.5">Kelola dan verifikasi bukti transfer pembayaran layanan pelanggan.</p>
         </div>
 
-        {{-- TABEL ANTREAN --}}
+        
         <div class="bg-white rounded-xl border border-gray-100">
             <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
                 <h2 class="font-semibold text-gray-800 text-sm">Antrean Verifikasi</h2>
                 <span class="text-xs font-bold text-amber-500 bg-amber-50 px-3 py-1 rounded-full">
-                    {{ $antrean->count() }} Pending
+                    <?php echo e($antrean->count()); ?> Pending
                 </span>
             </div>
 
@@ -56,21 +55,21 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    @forelse($antrean as $item)
+                    <?php $__empty_1 = true; $__currentLoopData = $antrean; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <tr class="hover:bg-gray-50/60 cursor-pointer"
-                        onclick="pilihPesanan({{ $item->id }}, '{{ $item->customer_name }}', '{{ number_format($item->amount, 0, ',', '.') }}', '{{ $item->payment_method }}', {{ $item->payment_id }}, '{{ $item->payment_proof }}')">
+                        onclick="pilihPesanan(<?php echo e($item->id); ?>, '<?php echo e($item->customer_name); ?>', '<?php echo e(number_format($item->amount, 0, ',', '.')); ?>', '<?php echo e($item->payment_method); ?>', <?php echo e($item->payment_id); ?>, '<?php echo e($item->payment_proof); ?>')">
                         <td class="px-5 py-3.5">
-                            <p class="text-sm text-gray-700 font-medium">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</p>
-                            <p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</p>
+                            <p class="text-sm text-gray-700 font-medium"><?php echo e(\Carbon\Carbon::parse($item->created_at)->format('d M Y')); ?></p>
+                            <p class="text-xs text-gray-400"><?php echo e(\Carbon\Carbon::parse($item->created_at)->format('H:i')); ?> WIB</p>
                         </td>
                         <td class="px-5 py-3.5">
-                            <span class="text-sm font-bold text-[#064E3B]">#BRS-{{ $item->id }}</span>
+                            <span class="text-sm font-bold text-[#064E3B]">#BRS-<?php echo e($item->id); ?></span>
                         </td>
                         <td class="px-5 py-3.5">
-                            <span class="text-sm text-gray-700">{{ $item->customer_name }}</span>
+                            <span class="text-sm text-gray-700"><?php echo e($item->customer_name); ?></span>
                         </td>
                         <td class="px-5 py-3.5">
-                            <span class="text-sm font-semibold text-gray-800">Rp {{ number_format($item->amount, 0, ',', '.') }}</span>
+                            <span class="text-sm font-semibold text-gray-800">Rp <?php echo e(number_format($item->amount, 0, ',', '.')); ?></span>
                         </td>
                         <td class="px-5 py-3.5">
                             <span class="text-xs font-semibold text-amber-500 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">● Pending</span>
@@ -78,34 +77,34 @@
                         <td class="px-5 py-3.5">
                             <div class="flex gap-1" onclick="event.stopPropagation()">
                                 <button type="button"
-                                    onclick="bukaModalAssign({{ $item->id }}, {{ $item->payment_id }}, '{{ $item->customer_name }}')"
+                                    onclick="bukaModalAssign(<?php echo e($item->id); ?>, <?php echo e($item->payment_id); ?>, '<?php echo e($item->customer_name); ?>')"
                                     class="text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 rounded-lg transition">
                                     ✓ Terima
                                 </button>
                                 <form method="POST" action="/bersihin/admin/verifikasi/reject">
-                                    @csrf
-                                    <input type="hidden" name="booking_id" value="{{ $item->id }}">
-                                    <input type="hidden" name="payment_id" value="{{ $item->payment_id }}">
+                                    <?php echo csrf_field(); ?>
+                                    <input type="hidden" name="booking_id" value="<?php echo e($item->id); ?>">
+                                    <input type="hidden" name="payment_id" value="<?php echo e($item->payment_id); ?>">
                                     <button type="submit" class="text-xs font-bold text-red-500 border border-red-300 hover:bg-red-50 px-3 py-1.5 rounded-lg transition">✕ Tolak</button>
                                 </form>
                             </div>
                         </td>
                     </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <tr>
                         <td colspan="6" class="px-5 py-8 text-center text-sm text-gray-400">Tidak ada antrean verifikasi</td>
                     </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
 
-        {{-- TABEL SUDAH DIVERIFIKASI --}}
+        
         <div class="bg-white rounded-xl border border-gray-100 mt-5">
             <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
                 <h2 class="font-semibold text-gray-800 text-sm">Sudah Diverifikasi & Belum Ditugaskan</h2>
                 <span class="text-xs font-bold text-blue-500 bg-blue-50 px-3 py-1 rounded-full">
-                    {{ $sudahVerifikasi->count() }} Pesanan
+                    <?php echo e($sudahVerifikasi->count()); ?> Pesanan
                 </span>
             </div>
             <table class="w-full">
@@ -120,123 +119,123 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    @forelse($sudahVerifikasi as $item)
+                    <?php $__empty_1 = true; $__currentLoopData = $sudahVerifikasi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <tr class="hover:bg-gray-50/60">
                         <td class="px-5 py-3.5">
-                            <span class="text-sm font-bold text-[#064E3B]">#BRS-{{ $item->id }}</span>
+                            <span class="text-sm font-bold text-[#064E3B]">#BRS-<?php echo e($item->id); ?></span>
                         </td>
                         <td class="px-5 py-3.5">
-                            <span class="text-sm text-gray-700">{{ $item->customer_name }}</span>
+                            <span class="text-sm text-gray-700"><?php echo e($item->customer_name); ?></span>
                         </td>
                         <td class="px-5 py-3.5">
-                            <span class="text-sm text-gray-700">{{ $item->service_name }}</span>
+                            <span class="text-sm text-gray-700"><?php echo e($item->service_name); ?></span>
                         </td>
                         <td class="px-5 py-3.5">
-                            <p class="text-sm text-gray-700">{{ \Carbon\Carbon::parse($item->booking_date)->format('d M Y') }}</p>
-                            <p class="text-xs text-gray-400">{{ $item->booking_time }}</p>
+                            <p class="text-sm text-gray-700"><?php echo e(\Carbon\Carbon::parse($item->booking_date)->format('d M Y')); ?></p>
+                            <p class="text-xs text-gray-400"><?php echo e($item->booking_time); ?></p>
                         </td>
                         <td class="px-5 py-3.5">
-                            @if($item->petugas_name)
-                                <span class="text-xs font-semibold text-green-700 bg-green-50 px-2.5 py-1 rounded-full">{{ $item->petugas_name }}</span>
-                            @else
+                            <?php if($item->petugas_name): ?>
+                                <span class="text-xs font-semibold text-green-700 bg-green-50 px-2.5 py-1 rounded-full"><?php echo e($item->petugas_name); ?></span>
+                            <?php else: ?>
                                 <span class="text-xs text-gray-400 italic">Belum ditugaskan</span>
-                            @endif
+                            <?php endif; ?>
                         </td>
                         <td class="px-5 py-3.5">
-                            @if(!$item->petugas_id)
+                            <?php if(!$item->petugas_id): ?>
                             <button type="button"
-                                onclick="bukaModalAssignSaja({{ $item->id }}, '{{ $item->customer_name }}')"
+                                onclick="bukaModalAssignSaja(<?php echo e($item->id); ?>, '<?php echo e($item->customer_name); ?>')"
                                 class="text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition">
                                 👤 Tugaskan
                             </button>
-                            @else
+                            <?php else: ?>
                             <span class="text-xs text-gray-400">✓ Sudah ditugaskan</span>
-                            @endif
+                            <?php endif; ?>
                         </td>
                     </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <tr>
                         <td colspan="6" class="px-5 py-8 text-center text-sm text-gray-400">Semua pesanan sudah ditugaskan</td>
                     </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
 
-    {{-- KOLOM KANAN --}}
+    
     <div class="w-80 shrink-0">
         <div class="bg-white rounded-xl border border-gray-100 overflow-hidden sticky top-5">
             <div class="px-5 py-3.5 border-b border-gray-100">
                 <h2 class="font-semibold text-gray-800 text-sm">Review Pembayaran</h2>
             </div>
 
-            {{-- AREA GAMBAR BUKTI TRANSFER --}}
+            
             <div class="p-4">
                 <div class="bg-gray-100 rounded-lg overflow-hidden" style="aspect-ratio:4/3;">
                     <div id="bukti-container" class="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-gray-200 to-gray-300">
-                        @if($antrean->count() > 0 && $antrean->first()->payment_proof)
-                            <img src="{{ asset('storage/' . $antrean->first()->payment_proof) }}"
+                        <?php if($antrean->count() > 0 && $antrean->first()->payment_proof): ?>
+                            <img src="<?php echo e(asset('storage/' . $antrean->first()->payment_proof)); ?>"
                                  class="w-full h-full object-contain cursor-pointer"
                                  onclick="window.open(this.src,'_blank')"
                                  title="Klik untuk perbesar">
-                        @else
+                        <?php else: ?>
                             <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                             <p class="text-xs text-gray-400 font-medium">Klik baris untuk lihat bukti</p>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
                 <p class="text-center text-xs text-gray-400 mt-2">Klik gambar untuk perbesar</p>
             </div>
 
-            {{-- DETAIL PESANAN --}}
+            
             <div class="px-5 pb-4 space-y-3 border-t border-gray-100 pt-4">
-                @if($antrean->count() > 0)
-                @php $first = $antrean->first(); @endphp
+                <?php if($antrean->count() > 0): ?>
+                <?php $first = $antrean->first(); ?>
                 <div class="flex items-center justify-between">
                     <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">ID Pesanan</span>
-                    <span class="text-sm font-bold text-[#064E3B]" id="detail-id">#BRS-{{ $first->id }}</span>
+                    <span class="text-sm font-bold text-[#064E3B]" id="detail-id">#BRS-<?php echo e($first->id); ?></span>
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Customer</span>
-                    <span class="text-sm font-bold text-gray-800" id="detail-customer">{{ $first->customer_name }}</span>
+                    <span class="text-sm font-bold text-gray-800" id="detail-customer"><?php echo e($first->customer_name); ?></span>
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Total Tagihan</span>
-                    <span class="text-sm font-bold text-gray-800" id="detail-amount">Rp {{ number_format($first->amount, 0, ',', '.') }}</span>
+                    <span class="text-sm font-bold text-gray-800" id="detail-amount">Rp <?php echo e(number_format($first->amount, 0, ',', '.')); ?></span>
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Metode</span>
-                    <span class="text-sm text-gray-700" id="detail-method">{{ $first->payment_method }}</span>
+                    <span class="text-sm text-gray-700" id="detail-method"><?php echo e($first->payment_method); ?></span>
                 </div>
-                @else
+                <?php else: ?>
                 <p class="text-sm text-gray-400 text-center py-4">Pilih pesanan untuk review</p>
-                @endif
+                <?php endif; ?>
             </div>
 
-            {{-- TOMBOL AKSI DI SIDEBAR --}}
+            
             <div id="sidebar-actions" class="px-5 pb-5 flex flex-col gap-2">
-                @if($antrean->count() > 0)
-                @php $first = $antrean->first(); @endphp
+                <?php if($antrean->count() > 0): ?>
+                <?php $first = $antrean->first(); ?>
                 <button type="button"
-                    onclick="bukaModalAssign({{ $first->id }}, {{ $first->payment_id }}, '{{ $first->customer_name }}')"
+                    onclick="bukaModalAssign(<?php echo e($first->id); ?>, <?php echo e($first->payment_id); ?>, '<?php echo e($first->customer_name); ?>')"
                     id="btn-terima"
                     class="w-full py-2.5 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2"
                     style="background:linear-gradient(135deg,#064e3b,#16a34a);">
                     ✓ Terima & Verifikasi
                 </button>
                 <form method="POST" action="/bersihin/admin/verifikasi/reject" id="form-tolak-sidebar">
-                    @csrf
-                    <input type="hidden" name="booking_id" id="sidebar-booking-id" value="{{ $first->id }}">
-                    <input type="hidden" name="payment_id" id="sidebar-payment-id" value="{{ $first->payment_id }}">
+                    <?php echo csrf_field(); ?>
+                    <input type="hidden" name="booking_id" id="sidebar-booking-id" value="<?php echo e($first->id); ?>">
+                    <input type="hidden" name="payment_id" id="sidebar-payment-id" value="<?php echo e($first->payment_id); ?>">
                     <button type="submit"
                         class="w-full py-2.5 rounded-xl font-bold text-sm text-red-600 border-2 border-red-200 hover:bg-red-50 transition">
                         ✕ Tolak Pembayaran
                     </button>
                 </form>
-                @endif
+                <?php endif; ?>
             </div>
 
             <div class="mx-5 mb-5 bg-emerald-50 border border-emerald-100 rounded-lg p-3 flex gap-2">
@@ -252,7 +251,7 @@
     </div>
 </div>
 
-{{-- ===== MODAL ASSIGN PETUGAS ===== --}}
+
 <div id="modalAssign"
      class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50"
      onclick="if(event.target===this)tutupModalAssign()">
@@ -289,7 +288,7 @@
         </div>
 
         <form method="POST" action="/bersihin/admin/verifikasi/approve-assign" id="formAssign">
-            @csrf
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="booking_id" id="assign-booking-id">
             <input type="hidden" name="payment_id" id="assign-payment-id">
             <input type="hidden" name="skip_payment" id="assign-skip-payment" value="0">
@@ -297,21 +296,22 @@
             <div class="px-6 py-5">
                 <label class="block text-sm font-semibold text-gray-700 mb-3">Pilih Petugas</label>
                 <div class="space-y-2 max-h-60 overflow-y-auto" id="daftar-petugas-radio">
-                    @forelse($daftarPetugas as $p)
+                    <?php $__empty_1 = true; $__currentLoopData = $daftarPetugas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50">
-                        <input type="radio" name="petugas_id" value="{{ $p->id }}" class="accent-emerald-600" required>
+                        <input type="radio" name="petugas_id" value="<?php echo e($p->id); ?>" class="accent-emerald-600" required>
                         <div class="w-9 h-9 bg-emerald-600 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
-                            {{ strtoupper(substr($p->name, 0, 2)) }}
+                            <?php echo e(strtoupper(substr($p->name, 0, 2))); ?>
+
                         </div>
                         <div class="flex-1">
-                            <p class="text-sm font-semibold text-gray-800">{{ $p->name }}</p>
-                            <p class="text-xs text-gray-400">{{ $p->email }}</p>
+                            <p class="text-sm font-semibold text-gray-800"><?php echo e($p->name); ?></p>
+                            <p class="text-xs text-gray-400"><?php echo e($p->email); ?></p>
                         </div>
                         <span class="text-xs font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">Ready</span>
                     </label>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <p class="text-sm text-gray-400 text-center py-4">Belum ada petugas terdaftar</p>
-                    @endforelse
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -394,4 +394,5 @@ function tutupModalAssign() {
 }
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('bersihin.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\prak-web-lanjut-2407051023\PBWL_BersihIn_Kel3\laravel\resources\views/bersihin/admin/verifikasi.blade.php ENDPATH**/ ?>

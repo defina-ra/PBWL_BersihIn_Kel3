@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BersihIn - <?php echo $__env->yieldContent('page-title', 'Dashboard'); ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,7 +15,6 @@
     
     <aside class="sidebar">
 
-        
         <div class="sidebar-logo">
             <h1>BersihIn</h1>
             <?php if(auth()->user()->hasRole('admin')): ?>
@@ -26,7 +26,6 @@
             <?php endif; ?>
         </div>
 
-        
         <?php if(auth()->user()->hasRole('petugas')): ?>
         <div class="sidebar-profile">
             <div class="sidebar-avatar"><?php echo e(strtoupper(substr(auth()->user()->name, 0, 1))); ?></div>
@@ -37,10 +36,8 @@
         </div>
         <?php endif; ?>
 
-        
         <nav class="sidebar-nav">
 
-            
             <?php if(auth()->user()->hasRole('admin')): ?>
                 <a href="/bersihin/admin" class="nav-item <?php echo e(request()->is('bersihin/admin') ? 'active' : ''); ?>">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -74,7 +71,6 @@
                     Laporan Transaksi
                 </a>
 
-            
             <?php elseif(auth()->user()->hasRole('petugas')): ?>
                 <a href="/bersihin/petugas/dashboard" class="nav-item <?php echo e(request()->is('bersihin/petugas/dashboard') ? 'active' : ''); ?>">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -95,7 +91,6 @@
                     Performance
                 </a>
 
-            
             <?php else: ?>
                 <a href="/bersihin/customer/dashboard" class="nav-item <?php echo e(request()->is('bersihin/customer/dashboard') ? 'active' : ''); ?>">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -125,10 +120,7 @@
 
         </nav>
 
-        
         <div class="sidebar-bottom">
-
-            
             <?php if(auth()->user()->hasRole('admin')): ?>
                 <a href="/bersihin/admin/pengaturan" class="nav-item <?php echo e(request()->is('bersihin/admin/pengaturan') ? 'active' : ''); ?>">
             <?php elseif(auth()->user()->hasRole('petugas')): ?>
@@ -143,7 +135,6 @@
                 Pengaturan
             </a>
 
-            
             <button onclick="document.getElementById('modalLogout').classList.remove('hidden')" class="nav-item nav-logout w-full text-left">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -157,19 +148,15 @@
     
     <div class="main-wrapper">
 
-        
         <header class="topbar">
 
-            
             <div>
                 <h2 class="topbar-title"><?php echo $__env->yieldContent('page-title', 'Dashboard'); ?></h2>
                 <p class="topbar-subtitle"><?php echo $__env->yieldContent('page-subtitle', 'Selamat datang kembali!'); ?></p>
             </div>
 
-            
             <div class="topbar-right">
 
-                
                 <?php if(auth()->user()->hasRole('petugas')): ?>
                 <div class="status-toggle">
                     <span class="status-label-text">Status Kerja</span>
@@ -181,53 +168,79 @@
                 <?php endif; ?>
 
                 
+                <?php
+                    $notifs = \DB::table('notifications')
+                        ->where('user_id', auth()->id())
+                        ->orderBy('created_at', 'desc')
+                        ->limit(10)
+                        ->get();
+                    $unreadCount = $notifs->where('is_read', false)->count();
+                ?>
+
                 <div class="notif-wrap" onclick="toggleNotif()">
                     <button class="icon-btn">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                         </svg>
-                        <span class="notif-badge">3</span>
+                        <?php if($unreadCount > 0): ?>
+                        <span class="notif-badge" id="notif-badge"><?php echo e($unreadCount); ?></span>
+                        <?php else: ?>
+                        <span class="notif-badge" id="notif-badge" style="display:none">0</span>
+                        <?php endif; ?>
                     </button>
 
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-header">
                             <span>Notifikasi</span>
-                            <button onclick="markAllRead()" class="notif-read-btn">Tandai dibaca</button>
+                            <?php if($unreadCount > 0): ?>
+                            <button type="button" class="notif-read-btn" id="btn-baca-semua" onclick="bacaSemua(event)">Tandai dibaca</button>
+                            <?php endif; ?>
                         </div>
-                        <div class="notif-item unread">
-                            <div class="notif-icon" style="background:#dcfce7">
-                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#16a34a" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+
+                        <?php $__empty_1 = true; $__currentLoopData = $notifs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notif): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <?php
+                            $iconBg = match($notif->type) {
+                                'success' => '#dcfce7',
+                                'warning' => '#fef9c3',
+                                'info'    => '#dbeafe',
+                                'error'   => '#fee2e2',
+                                default   => '#f3f4f6',
+                            };
+                            $iconColor = match($notif->type) {
+                                'success' => '#16a34a',
+                                'warning' => '#d97706',
+                                'info'    => '#2563eb',
+                                'error'   => '#dc2626',
+                                default   => '#6b7280',
+                            };
+                            $iconPath = match($notif->icon ?? '') {
+                                'check'  => 'M5 13l4 4L19 7',
+                                'promo'  => 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z',
+                                'person' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+                                'car'    => 'M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10',
+                                default  => 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+                            };
+                        ?>
+                        <div class="notif-item <?php echo e($notif->is_read ? '' : 'unread'); ?>">
+                            <div class="notif-icon" style="background:<?php echo e($iconBg); ?>">
+                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="<?php echo e($iconColor); ?>" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="<?php echo e($iconPath); ?>"/>
+                                </svg>
                             </div>
                             <div>
-                                <p class="notif-title">Pesanan dikonfirmasi</p>
-                                <p class="notif-desc">Pesanan #BSH-99281 telah dikonfirmasi</p>
-                                <p class="notif-time">2 menit lalu</p>
+                                <p class="notif-title"><?php echo e($notif->title); ?></p>
+                                <p class="notif-desc"><?php echo e($notif->message); ?></p>
+                                <p class="notif-time"><?php echo e(\Carbon\Carbon::parse($notif->created_at)->diffForHumans()); ?></p>
                             </div>
                         </div>
-                        <div class="notif-item unread">
-                            <div class="notif-icon" style="background:#fef9c3">
-                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#d97706" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                            </div>
-                            <div>
-                                <p class="notif-title">Promo baru tersedia!</p>
-                                <p class="notif-desc">Diskon 30% untuk Deep Clean</p>
-                                <p class="notif-time">1 jam lalu</p>
-                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <div class="px-4 py-6 text-center text-sm text-gray-400">
+                            Tidak ada notifikasi
                         </div>
-                        <div class="notif-item">
-                            <div class="notif-icon" style="background:#f3f4f6">
-                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            </div>
-                            <div>
-                                <p class="notif-title">Tugas selesai dikonfirmasi</p>
-                                <p class="notif-desc">General Cleaning telah diverifikasi</p>
-                                <p class="notif-time" style="color:#9ca3af">Kemarin</p>
-                            </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
-                
                 <div class="user-info">
                     <div class="user-text">
                         <p class="user-name"><?php echo e(auth()->user()->name); ?></p>
@@ -244,7 +257,6 @@
             </div>
         </header>
 
-        
         <main class="main-content">
             <?php echo $__env->yieldContent('content'); ?>
         </main>
@@ -281,16 +293,32 @@
 function toggleNotif() {
     document.getElementById('notifDropdown').classList.toggle('show');
 }
-function markAllRead() {
-    document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
-    document.querySelector('.notif-badge').style.display = 'none';
-}
 document.addEventListener('click', function(e) {
     const wrap = document.querySelector('.notif-wrap');
     if (wrap && !wrap.contains(e.target)) {
         document.getElementById('notifDropdown').classList.remove('show');
     }
 });
+function bacaSemua(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    fetch('/bersihin/notifikasi/baca-semua', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Content-Type': 'application/json'
+        }
+    }).then(() => {
+        // Hapus semua class unread
+        document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
+        // Sembunyikan badge
+        const badge = document.getElementById('notif-badge');
+        if (badge) badge.style.display = 'none';
+        // Sembunyikan tombol tandai dibaca
+        const btn = document.getElementById('btn-baca-semua');
+        if (btn) btn.style.display = 'none';
+    });
+}
 function toggleStatus(btn) {
     const dot = btn.querySelector('span');
     const label = document.getElementById('statusLabel');

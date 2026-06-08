@@ -203,5 +203,13 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
+        // === PROMOS ===
+        DB::table('promos')->insert([
+            ['title' => 'Potongan Rp 15.000', 'subtitle' => 'Khusus Cuci AC · Min. order Rp 100.000', 'discount_amount' => 15000, 'discount_percent' => null, 'type' => 'diskon', 'min_order' => '100000', 'valid_until' => '30 Nov 2025', 'color' => 'green', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['title' => 'Potongan Rp 25.000', 'subtitle' => 'Cuci Kasur Pro · Min. order Rp 150.000', 'discount_amount' => 25000, 'discount_percent' => null, 'type' => 'diskon', 'min_order' => '150000', 'valid_until' => '21 Nov 2025', 'color' => 'blue', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['title' => 'Hemat 10%', 'subtitle' => 'Hydro-Vacuum · Semua kategori', 'discount_amount' => null, 'discount_percent' => 10, 'type' => 'gratis', 'min_order' => null, 'valid_until' => '30 Nov 2025', 'color' => 'amber', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['title' => 'Gold Reward: Rp 50.000', 'subtitle' => 'Khusus member Gold · Semua layanan', 'discount_amount' => 50000, 'discount_percent' => null, 'type' => 'diskon', 'min_order' => null, 'valid_until' => '31 Des 2025', 'color' => 'purple', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['title' => 'Deep Clean Bundle −20%', 'subtitle' => 'Paket rumah lengkap · Min. 2 layanan', 'discount_amount' => null, 'discount_percent' => 20, 'type' => 'diskon', 'min_order' => null, 'valid_until' => '15 Des 2025', 'color' => 'green', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+        ]);
     }
 }
