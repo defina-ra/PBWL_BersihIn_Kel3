@@ -70,7 +70,7 @@
         </div>
         <div>
             <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Voucher</p>
-            <p class="text-3xl font-extrabold text-gray-900" style="font-family:'Sora',sans-serif;">3 <span class="text-sm font-medium text-gray-400">Tersedia</span></p>
+            <p class="text-3xl font-extrabold text-gray-900" style="font-family:'Sora',sans-serif;"><?php echo e($totalVoucher); ?> <span class="text-sm font-medium text-gray-400">Tersedia</span></p>
         </div>
     </div>
 </div>
@@ -151,5 +151,4 @@
 </div>
 
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('bersihin.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\prak-web-lanjut-2407051023\PBWL_BersihIn_Kel3\laravel\resources\views/bersihin/customer/dashboard.blade.php ENDPATH**/ ?>

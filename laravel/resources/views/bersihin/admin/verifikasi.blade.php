@@ -29,8 +29,8 @@
 <div class="flex gap-5">
 
     {{-- KOLOM KIRI --}}
-    <div class="flex-1">
-        <div class="mb-5">
+    <div class="flex-1 space-y-5">
+        <div>
             <h1 class="text-xl font-bold text-gray-900">Verifikasi Pembayaran</h1>
             <p class="text-sm text-gray-400 mt-0.5">Kelola dan verifikasi bukti transfer pembayaran layanan pelanggan.</p>
         </div>
@@ -43,7 +43,6 @@
                     {{ $antrean->count() }} Pending
                 </span>
             </div>
-
             <table class="w-full">
                 <thead>
                     <tr class="border-b border-gray-100">
@@ -55,27 +54,27 @@
                         <th class="text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide px-5 py-3">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-50">
+                <tbody>
                     @forelse($antrean as $item)
-                    <tr class="hover:bg-gray-50/60 cursor-pointer"
+                    <tr class="hover:bg-gray-50/60 cursor-pointer border-t border-gray-50"
                         onclick="pilihPesanan({{ $item->id }}, '{{ $item->customer_name }}', '{{ number_format($item->amount, 0, ',', '.') }}', '{{ $item->payment_method }}', {{ $item->payment_id }}, '{{ $item->payment_proof }}')">
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             <p class="text-sm text-gray-700 font-medium">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</p>
-                            <p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</p>
+                            <p class="text-xs text-gray-400 mt-0.5">{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</p>
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             <span class="text-sm font-bold text-[#064E3B]">#BRS-{{ $item->id }}</span>
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             <span class="text-sm text-gray-700">{{ $item->customer_name }}</span>
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             <span class="text-sm font-semibold text-gray-800">Rp {{ number_format($item->amount, 0, ',', '.') }}</span>
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             <span class="text-xs font-semibold text-amber-500 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">● Pending</span>
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             <div class="flex gap-1" onclick="event.stopPropagation()">
                                 <button type="button"
                                     onclick="bukaModalAssign({{ $item->id }}, {{ $item->payment_id }}, '{{ $item->customer_name }}')"
@@ -101,7 +100,7 @@
         </div>
 
         {{-- TABEL SUDAH DIVERIFIKASI --}}
-        <div class="bg-white rounded-xl border border-gray-100 mt-5">
+        <div class="bg-white rounded-xl border border-gray-100">
             <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
                 <h2 class="font-semibold text-gray-800 text-sm">Sudah Diverifikasi & Belum Ditugaskan</h2>
                 <span class="text-xs font-bold text-blue-500 bg-blue-50 px-3 py-1 rounded-full">
@@ -119,30 +118,30 @@
                         <th class="text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide px-5 py-3">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-50">
+                <tbody>
                     @forelse($sudahVerifikasi as $item)
-                    <tr class="hover:bg-gray-50/60">
-                        <td class="px-5 py-3.5">
+                    <tr class="hover:bg-gray-50/60 border-t border-gray-50">
+                        <td class="px-5 py-4">
                             <span class="text-sm font-bold text-[#064E3B]">#BRS-{{ $item->id }}</span>
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             <span class="text-sm text-gray-700">{{ $item->customer_name }}</span>
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             <span class="text-sm text-gray-700">{{ $item->service_name }}</span>
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             <p class="text-sm text-gray-700">{{ \Carbon\Carbon::parse($item->booking_date)->format('d M Y') }}</p>
-                            <p class="text-xs text-gray-400">{{ $item->booking_time }}</p>
+                            <p class="text-xs text-gray-400 mt-0.5">{{ $item->booking_time }}</p>
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             @if($item->petugas_name)
                                 <span class="text-xs font-semibold text-green-700 bg-green-50 px-2.5 py-1 rounded-full">{{ $item->petugas_name }}</span>
                             @else
                                 <span class="text-xs text-gray-400 italic">Belum ditugaskan</span>
                             @endif
                         </td>
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-4">
                             @if(!$item->petugas_id)
                             <button type="button"
                                 onclick="bukaModalAssignSaja({{ $item->id }}, '{{ $item->customer_name }}')"
@@ -162,6 +161,64 @@
                 </tbody>
             </table>
         </div>
+
+        {{-- RIWAYAT TRANSAKSI --}}
+        <div class="bg-white rounded-xl border border-gray-100">
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
+                <h2 class="font-semibold text-gray-800 text-sm">Riwayat Transaksi</h2>
+                <span class="text-xs font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full">
+                    {{ $riwayat->count() }} Transaksi
+                </span>
+            </div>
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-100">
+                        <th class="text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide px-5 py-3">Tanggal</th>
+                        <th class="text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide px-5 py-3">ID Pesanan</th>
+                        <th class="text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide px-5 py-3">Customer</th>
+                        <th class="text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide px-5 py-3">Layanan</th>
+                        <th class="text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide px-5 py-3">Nominal</th>
+                        <th class="text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide px-5 py-3">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($riwayat as $item)
+                    <tr class="hover:bg-gray-50/60 border-t border-gray-50 cursor-pointer"
+                        onclick="pilihPesanan({{ $item->booking_id }}, '{{ $item->customer_name }}', '{{ number_format($item->amount, 0, ',', '.') }}', '{{ $item->payment_method }}', {{ $item->payment_id }}, '{{ $item->payment_proof }}')">
+                        <td class="px-5 py-4">
+                            <p class="text-sm text-gray-700">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</p>
+                            <p class="text-xs text-gray-400 mt-0.5">{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</p>
+                        </td>
+                        <td class="px-5 py-4">
+                            <span class="text-sm font-bold text-[#064E3B]">#BRS-{{ $item->booking_id }}</span>
+                        </td>
+                        <td class="px-5 py-4">
+                            <span class="text-sm text-gray-700">{{ $item->customer_name }}</span>
+                        </td>
+                        <td class="px-5 py-4">
+                            <span class="text-xs font-semibold bg-green-50 text-green-700 px-2.5 py-1 rounded-lg">{{ $item->service_name }}</span>
+                        </td>
+                        <td class="px-5 py-4">
+                            <span class="text-sm font-semibold text-gray-800">Rp {{ number_format($item->amount, 0, ',', '.') }}</span>
+                        </td>
+                        <td class="px-5 py-4">
+                            @if($item->payment_status === 'paid')
+                            <span class="text-xs font-semibold text-green-600 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">✓ Paid</span>
+                            @elseif($item->payment_status === 'failed')
+                            <span class="text-xs font-semibold text-red-500 bg-red-50 border border-red-200 px-2.5 py-1 rounded-full">✕ Ditolak</span>
+                            @else
+                            <span class="text-xs font-semibold text-gray-400 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-full">{{ $item->payment_status }}</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="px-5 py-8 text-center text-sm text-gray-400">Belum ada riwayat transaksi</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     {{-- KOLOM KANAN --}}
@@ -170,8 +227,6 @@
             <div class="px-5 py-3.5 border-b border-gray-100">
                 <h2 class="font-semibold text-gray-800 text-sm">Review Pembayaran</h2>
             </div>
-
-            {{-- AREA GAMBAR BUKTI TRANSFER --}}
             <div class="p-4">
                 <div class="bg-gray-100 rounded-lg overflow-hidden" style="aspect-ratio:4/3;">
                     <div id="bukti-container" class="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-gray-200 to-gray-300">
@@ -191,7 +246,6 @@
                 <p class="text-center text-xs text-gray-400 mt-2">Klik gambar untuk perbesar</p>
             </div>
 
-            {{-- DETAIL PESANAN --}}
             <div class="px-5 pb-4 space-y-3 border-t border-gray-100 pt-4">
                 @if($antrean->count() > 0)
                 @php $first = $antrean->first(); @endphp
@@ -212,11 +266,14 @@
                     <span class="text-sm text-gray-700" id="detail-method">{{ $first->payment_method }}</span>
                 </div>
                 @else
+                <div id="detail-id" class="hidden"></div>
+                <div id="detail-customer" class="hidden"></div>
+                <div id="detail-amount" class="hidden"></div>
+                <div id="detail-method" class="hidden"></div>
                 <p class="text-sm text-gray-400 text-center py-4">Pilih pesanan untuk review</p>
                 @endif
             </div>
 
-            {{-- TOMBOL AKSI DI SIDEBAR --}}
             <div id="sidebar-actions" class="px-5 pb-5 flex flex-col gap-2">
                 @if($antrean->count() > 0)
                 @php $first = $antrean->first(); @endphp
@@ -252,30 +309,23 @@
     </div>
 </div>
 
-{{-- ===== MODAL ASSIGN PETUGAS ===== --}}
-<div id="modalAssign"
-     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+{{-- MODAL ASSIGN --}}
+<div id="modalAssign" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50"
      onclick="if(event.target===this)tutupModalAssign()">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4" onclick="event.stopPropagation()">
-
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
             <div>
                 <h3 class="font-bold text-gray-900">Tugaskan Petugas</h3>
                 <p class="text-xs text-gray-400 mt-0.5" id="modal-subtitle">Pilih petugas untuk pesanan ini</p>
             </div>
             <button onclick="tutupModalAssign()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
-                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
-
         <div class="px-6 py-4 bg-emerald-50 border-b border-emerald-100">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 bg-emerald-600 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                    </svg>
+                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
                 <div>
                     <p class="text-xs text-emerald-600 font-medium">Pesanan</p>
@@ -287,18 +337,16 @@
                 </div>
             </div>
         </div>
-
         <form method="POST" action="/bersihin/admin/verifikasi/approve-assign" id="formAssign">
             @csrf
             <input type="hidden" name="booking_id" id="assign-booking-id">
             <input type="hidden" name="payment_id" id="assign-payment-id">
             <input type="hidden" name="skip_payment" id="assign-skip-payment" value="0">
-
             <div class="px-6 py-5">
                 <label class="block text-sm font-semibold text-gray-700 mb-3">Pilih Petugas</label>
-                <div class="space-y-2 max-h-60 overflow-y-auto" id="daftar-petugas-radio">
+                <div class="space-y-2 max-h-60 overflow-y-auto">
                     @forelse($daftarPetugas as $p)
-                    <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50">
+                    <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition">
                         <input type="radio" name="petugas_id" value="{{ $p->id }}" class="accent-emerald-600" required>
                         <div class="w-9 h-9 bg-emerald-600 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
                             {{ strtoupper(substr($p->name, 0, 2)) }}
@@ -314,17 +362,12 @@
                     @endforelse
                 </div>
             </div>
-
             <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
                 <button type="button" onclick="tutupModalAssign()"
-                    class="flex-1 border border-gray-200 text-gray-600 text-sm font-semibold py-2.5 rounded-xl hover:bg-gray-50">
-                    Batal
-                </button>
+                    class="flex-1 border border-gray-200 text-gray-600 text-sm font-semibold py-2.5 rounded-xl hover:bg-gray-50">Batal</button>
                 <button type="submit"
                     class="flex-1 bg-[#064E3B] text-white text-sm font-semibold py-2.5 rounded-xl hover:bg-emerald-800 flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                    </svg>
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                     Tugaskan Petugas
                 </button>
             </div>
@@ -333,41 +376,29 @@
 </div>
 
 <script>
-// Klik baris → update sidebar kanan + gambar bukti
 function pilihPesanan(id, customer, amount, method, paymentId, proof) {
     document.getElementById('detail-id').textContent = '#BRS-' + id;
     document.getElementById('detail-customer').textContent = customer;
     document.getElementById('detail-amount').textContent = 'Rp ' + amount;
     document.getElementById('detail-method').textContent = method;
 
-    // Update tombol sidebar
     const btnTerima = document.getElementById('btn-terima');
-    if (btnTerima) {
-        btnTerima.onclick = function() { bukaModalAssign(id, paymentId, customer); };
-    }
+    if (btnTerima) btnTerima.onclick = function() { bukaModalAssign(id, paymentId, customer); };
     const sbBookingId = document.getElementById('sidebar-booking-id');
     const sbPaymentId = document.getElementById('sidebar-payment-id');
     if (sbBookingId) sbBookingId.value = id;
     if (sbPaymentId) sbPaymentId.value = paymentId;
 
-    // Update gambar bukti transfer
     const container = document.getElementById('bukti-container');
     if (proof && proof !== 'null' && proof !== '') {
-        container.innerHTML = `<img src="/storage/${proof}"
-            class="w-full h-full object-contain cursor-pointer"
-            onclick="window.open(this.src,'_blank')"
-            title="Klik untuk perbesar"
-            onerror="this.parentElement.innerHTML='<p class=\\'text-xs text-red-400 p-4 text-center\\'>Gambar tidak ditemukan.<br>Cek storage:link</p>'">`;
+        container.innerHTML = `<img src="/storage/${proof}" class="w-full h-full object-contain cursor-pointer" onclick="window.open(this.src,'_blank')" title="Klik untuk perbesar" onerror="this.parentElement.innerHTML='<p class=\\'text-xs text-red-400 p-4 text-center\\'>Gambar tidak ditemukan</p>'">`;
     } else {
         container.innerHTML = `
-            <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
+            <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
             <p class="text-xs text-gray-400">Tidak ada bukti transfer</p>`;
     }
 }
 
-// Terima + assign (dari tabel antrean)
 function bukaModalAssign(bookingId, paymentId, customerName) {
     document.getElementById('modal-order-id').textContent = '#BRS-' + bookingId;
     document.getElementById('modal-customer-name').textContent = customerName;
@@ -378,7 +409,6 @@ function bukaModalAssign(bookingId, paymentId, customerName) {
     document.getElementById('modalAssign').classList.remove('hidden');
 }
 
-// Assign saja (dari tabel sudah verifikasi)
 function bukaModalAssignSaja(bookingId, customerName) {
     document.getElementById('modal-order-id').textContent = '#BRS-' + bookingId;
     document.getElementById('modal-customer-name').textContent = customerName;

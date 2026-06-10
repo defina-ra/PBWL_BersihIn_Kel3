@@ -72,7 +72,7 @@
         </div>
         <div>
             <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Voucher</p>
-            <p class="text-3xl font-extrabold text-gray-900" style="font-family:'Sora',sans-serif;">3 <span class="text-sm font-medium text-gray-400">Tersedia</span></p>
+            <p class="text-3xl font-extrabold text-gray-900" style="font-family:'Sora',sans-serif;">{{ $totalVoucher }} <span class="text-sm font-medium text-gray-400">Tersedia</span></p>
         </div>
     </div>
 </div>

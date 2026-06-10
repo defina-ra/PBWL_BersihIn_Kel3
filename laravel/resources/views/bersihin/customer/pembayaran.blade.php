@@ -47,25 +47,31 @@
                     <p class="text-gray-700 text-sm mt-1">1234-5678-9012</p>
                     <p class="text-gray-500 text-sm">a.n BersihIn Indonesia</p>
                 </div>
-                <button onclick="navigator.clipboard.writeText('1234567890 12');this.innerText='Tersalin!';setTimeout(()=>this.innerText='Salin Nomor Rekening',2000)"
+                <button onclick="navigator.clipboard.writeText('123456789012');this.innerText='Tersalin!';setTimeout(()=>this.innerText='Salin Nomor Rekening',2000)"
                     class="border border-green-500 text-green-600 text-sm font-semibold px-4 py-2 rounded-full hover:bg-green-50 transition mb-6">
                     Salin Nomor Rekening
                 </button>
 
                 <h3 class="font-bold text-gray-800 mb-3">Upload Bukti</h3>
-                <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 mb-4">
-                    <input type="file" class="w-full text-sm text-gray-500">
-                </div>
-                <textarea rows="2" placeholder="Catatan (opsional)"
-                    class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-500 resize-none focus:outline-none focus:border-green-500 mb-4"></textarea>
-               <form method="POST" action="/bersihin/pembayaran" enctype="multipart/form-data">
-    @csrf
-    <input type="hidden" name="booking_id" value="{{ $booking->id ?? '' }}">
-    
-    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl text-base transition mb-3">
-        Kirim Bukti
-    </button>
-</form>
+
+                <form method="POST" action="/bersihin/pembayaran" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="booking_id" value="{{ $booking->id ?? '' }}">
+
+                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 mb-4">
+                        <input type="file" name="payment_proof" accept="image/*"
+                            class="w-full text-sm text-gray-500">
+                        <p class="text-xs text-gray-400 mt-2">Format: JPG, PNG, maks 2MB</p>
+                    </div>
+
+                    <textarea name="catatan" rows="2" placeholder="Catatan (opsional)"
+                        class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-500 resize-none focus:outline-none focus:border-green-500 mb-4"></textarea>
+
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl text-base transition mb-3">
+                        Kirim Bukti
+                    </button>
+                </form>
+
                 <p class="text-amber-500 text-sm font-medium">Status: Menunggu upload</p>
             </div>
         </div>

@@ -163,10 +163,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             )
             ->latest('bookings.created_at')->get();
 
-        // Daftar petugas untuk modal assign
+     // Daftar petugas untuk modal assign
         $daftarPetugas = \App\Models\User::role('petugas')->get();
 
-        return view('bersihin.admin.verifikasi', compact('antrean', 'sudahVerifikasi', 'daftarPetugas'));
+        $riwayat = \DB::table('payments')
+            ->join('bookings', 'payments.booking_id', '=', 'bookings.id')
+            ->join('users', 'bookings.user_id', '=', 'users.id')
+            ->join('services', 'bookings.service_id', '=', 'services.id')
+            ->whereIn('payments.payment_status', ['paid', 'failed'])
+            ->select('payments.*', 'payments.id as payment_id', 'users.name as customer_name', 'services.service_name', 'bookings.id as booking_id')
+            ->latest('payments.updated_at')->get();
+
+        return view('bersihin.admin.verifikasi', compact('antrean', 'sudahVerifikasi', 'daftarPetugas', 'riwayat'));
     });
 
     // Approve + assign petugas sekaligus (dari modal)
@@ -289,24 +297,78 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     return redirect('/bersihin/admin/petugas')
         ->with('error', 'Petugas tidak ditemukan.');
 });
+
     // ===== LAPORAN =====
-    Route::get('/bersihin/admin/laporan', function () {
-        $totalPendapatan = \DB::table('payments')->where('payment_status', 'paid')->sum('amount');
-        $totalTransaksi  = \DB::table('payments')->where('payment_status', 'paid')->count();
-        $transaksi       = \DB::table('payments')
+   Route::get('/bersihin/admin/laporan', function () {
+    $totalPendapatan = \DB::table('payments')->where('payment_status', 'paid')->sum('amount');
+    $totalTransaksi  = \DB::table('payments')->where('payment_status', 'paid')->count();
+    $totalPending    = \DB::table('payments')->where('payment_status', 'pending')->count();
+    $estimasiLaba    = $totalPendapatan * 0.3;
+    $layananList     = \DB::table('services')->get();
+    $transaksi       = \DB::table('payments')
+        ->join('bookings', 'payments.booking_id', '=', 'bookings.id')
+        ->join('users', 'bookings.user_id', '=', 'users.id')
+        ->join('services', 'bookings.service_id', '=', 'services.id')
+        ->select('payments.*', 'users.name as customer_name', 'services.service_name', 'bookings.created_at as booking_date')
+        ->latest('payments.created_at')->get();
+
+    return view('bersihin.admin.laporan', compact(
+        'totalPendapatan', 'totalTransaksi', 'totalPending',
+        'estimasiLaba', 'layananList', 'transaksi'
+    ));
+});
+        Route::get('/bersihin/admin/laporan/unduh', function () {
+        $transaksi = \DB::table('payments')
             ->join('bookings', 'payments.booking_id', '=', 'bookings.id')
             ->join('users', 'bookings.user_id', '=', 'users.id')
             ->join('services', 'bookings.service_id', '=', 'services.id')
-            ->select('payments.*', 'users.name as customer_name', 'services.service_name', 'bookings.created_at as booking_date')
+            ->select('payments.*', 'users.name as customer_name', 'services.service_name')
             ->latest('payments.created_at')->get();
 
-        return view('bersihin.admin.laporan', compact('totalPendapatan', 'totalTransaksi', 'transaksi'));
+        $totalPendapatan = $transaksi->where('payment_status', 'paid')->sum('amount');
+        $totalTransaksi  = $transaksi->where('payment_status', 'paid')->count();
+
+       $html = view('bersihin.admin.laporan-pdf', compact('transaksi', 'totalPendapatan', 'totalTransaksi'))->render();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadHTML($html);
+
+        return $pdf->download('laporan-transaksi-' . date('Y-m-d') . '.pdf');
     });
 
     // ===== LAYANAN =====
     Route::get('/bersihin/admin/layanan', function () {
-        $layanan = \DB::table('services')->get();
-        return view('bersihin.admin.layanan', compact('layanan'));
+    $layanan = \DB::table('services')->get();
+    $promos  = \DB::table('promos')->get();
+    return view('bersihin.admin.layanan', compact('layanan', 'promos'));
+});
+// Tambah layanan
+    Route::post('/bersihin/admin/layanan', function () {
+        \DB::table('services')->insert([
+            'service_name' => request('service_name'),
+            'description'  => request('description'),
+            'price'        => request('price'),
+            'duration'     => request('duration') ?? 60,
+            'created_at'   => now(),
+            'updated_at'   => now(),
+        ]);
+        return redirect('/bersihin/admin/layanan')->with('success', 'Layanan berhasil ditambahkan! ✅');
+    });
+
+    // Edit layanan
+    Route::post('/bersihin/admin/layanan/edit', function () {
+        \DB::table('services')->where('id', request('layanan_id'))->update([
+            'service_name' => request('service_name'),
+            'description'  => request('description'),
+            'price'        => request('price'),
+            'duration'     => request('duration') ?? 60,
+            'updated_at'   => now(),
+        ]);
+        return redirect('/bersihin/admin/layanan')->with('success', 'Layanan berhasil diupdate! ✅');
+    });
+
+    // Hapus layanan
+    Route::post('/bersihin/admin/layanan/hapus', function () {
+        \DB::table('services')->where('id', request('layanan_id'))->delete();
+        return redirect('/bersihin/admin/layanan')->with('success', 'Layanan berhasil dihapus!');
     });
 
     // ===== PENGATURAN =====
@@ -314,9 +376,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         return view('bersihin.admin.pengaturan');
     });
 
-    Route::get('/bersihin/admin/detail-pesanan', function () {
-        return view('bersihin.admin.detail-pesanan');
-    });
+   Route::get('/bersihin/admin/detail-pesanan', function () {
+    $id = request('id');
+    $booking = \DB::table('bookings')
+        ->join('users', 'bookings.user_id', '=', 'users.id')
+        ->join('services', 'bookings.service_id', '=', 'services.id')
+        ->leftJoin('users as petugas', 'bookings.petugas_id', '=', 'petugas.id')
+        ->where('bookings.id', $id)
+        ->select('bookings.*', 'users.name as customer_name', 'users.phone as customer_phone', 'services.service_name', 'petugas.name as petugas_name', 'petugas.phone as petugas_phone')
+        ->first();
+
+    $payment = \DB::table('payments')->where('booking_id', $id)->first();
+
+    return view('bersihin.admin.detail-pesanan', compact('booking', 'payment'));
+});
 });
 
 // ===== PETUGAS ONLY =====
@@ -436,16 +509,17 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
 // ===== CUSTOMER ONLY =====
 Route::middleware(['auth', 'role:customer'])->group(function () {
 
-    Route::get('/bersihin/customer/dashboard', function () {
-        $user          = \Auth::user();
-        $totalPesanan  = \DB::table('bookings')->where('user_id', $user->id)->count();
-        $pesananAktif  = \DB::table('bookings')
-            ->where('user_id', $user->id)
-            ->whereIn('status', ['confirmed', 'on_the_way', 'in_progress', 'pending'])
-            ->first();
+   Route::get('/bersihin/customer/dashboard', function () {
+    $user          = \Auth::user();
+    $totalPesanan  = \DB::table('bookings')->where('user_id', $user->id)->count();
+    $pesananAktif  = \DB::table('bookings')
+        ->where('user_id', $user->id)
+        ->whereIn('status', ['confirmed', 'on_the_way', 'in_progress', 'pending'])
+        ->first();
+    $totalVoucher  = \DB::table('promos')->where('is_active', true)->count();
 
-        return view('bersihin.customer.dashboard', compact('user', 'totalPesanan', 'pesananAktif'));
-    });
+    return view('bersihin.customer.dashboard', compact('user', 'totalPesanan', 'pesananAktif', 'totalVoucher'));
+});
 
     Route::get('/bersihin/customer/pesanan', function () {
         $user           = \Auth::user();
@@ -563,15 +637,16 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
                 ->select('services.price')
                 ->first();
 
-            \DB::table('payments')->insert([
-                'booking_id'     => $bookingId,
-                'amount'         => $booking->price ?? 0,
-                'payment_method' => 'transfer',
-                'payment_status' => 'pending',
-                'payment_date'   => null,
-                'created_at'     => now(),
-                'updated_at'     => now(),
-            ]);
+           \DB::table('payments')->insert([
+            'booking_id'     => $bookingId,
+             'amount'         => $booking->price ?? 0,
+            'payment_method' => 'transfer',
+            'payment_status' => 'pending',
+            'payment_proof'  => $proofPath,
+            'payment_date'   => null,
+            'created_at'     => now(),
+            'updated_at'     => now(),
+        ]);
         }
 
         // Status booking tetap pending, menunggu verifikasi admin

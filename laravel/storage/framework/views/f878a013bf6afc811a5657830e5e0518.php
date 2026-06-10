@@ -191,7 +191,7 @@
                     <?php endif; ?>
                 </td>
                 <td class="px-5 py-3.5">
-                    <a href="/bersihin/admin/detail-pesanan"
+                   <a href="/bersihin/admin/detail-pesanan?id=<?php echo e($p->id); ?>"
                        class="px-4 py-1.5 bg-[#064E3B] text-white text-xs font-semibold rounded-lg hover:bg-emerald-800 inline-block">
                         Lihat Detail
                     </a>
