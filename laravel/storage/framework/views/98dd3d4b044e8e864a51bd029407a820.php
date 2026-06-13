@@ -157,16 +157,6 @@
 
             <div class="topbar-right">
 
-                <?php if(auth()->user()->hasRole('petugas')): ?>
-                <div class="status-toggle">
-                    <span class="status-label-text">Status Kerja</span>
-                    <button onclick="toggleStatus(this)" class="toggle-btn active-toggle">
-                        <span class="toggle-dot translate-x-5"></span>
-                    </button>
-                    <span id="statusLabel" class="status-text">Aktif</span>
-                </div>
-                <?php endif; ?>
-
                 
                 <?php
                     $notifs = \DB::table('notifications')
@@ -309,33 +299,12 @@ function bacaSemua(e) {
             'Content-Type': 'application/json'
         }
     }).then(() => {
-        // Hapus semua class unread
         document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
-        // Sembunyikan badge
         const badge = document.getElementById('notif-badge');
         if (badge) badge.style.display = 'none';
-        // Sembunyikan tombol tandai dibaca
         const btn = document.getElementById('btn-baca-semua');
         if (btn) btn.style.display = 'none';
     });
-}
-function toggleStatus(btn) {
-    const dot = btn.querySelector('span');
-    const label = document.getElementById('statusLabel');
-    const isActive = dot.classList.contains('translate-x-5');
-    if (isActive) {
-        dot.classList.replace('translate-x-5', 'translate-x-0');
-        btn.classList.remove('active-toggle');
-        btn.classList.add('inactive-toggle');
-        label.textContent = 'Tidak Aktif';
-        label.style.color = '#9ca3af';
-    } else {
-        dot.classList.replace('translate-x-0', 'translate-x-5');
-        btn.classList.add('active-toggle');
-        btn.classList.remove('inactive-toggle');
-        label.textContent = 'Aktif';
-        label.style.color = '#064E3B';
-    }
 }
 </script>
 </body>

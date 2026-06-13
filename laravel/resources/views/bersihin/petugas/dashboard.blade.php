@@ -147,56 +147,18 @@
 
 </div>
 
-{{-- CATATAN + BANTUAN --}}
-<div class="grid grid-cols-3 gap-6">
-
-  <div class="col-span-2 bg-white rounded-2xl border border-gray-100 p-6">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="font-bold text-gray-900">Catatan Khusus Pelanggan</h3>
-    </div>
-    @if($tugasSelanjutnya)
-    <div class="border-l-4 border-[#064E3B] pl-4 bg-green-50/50 py-3 pr-4 rounded-r-xl">
-      <p class="text-gray-600 text-sm italic leading-relaxed">
-        "Pastikan membawa perlengkapan lengkap untuk layanan {{ $tugasSelanjutnya->service_name }} di {{ $tugasSelanjutnya->address }}."
-      </p>
-    </div>
-    @else
-    <p class="text-gray-400 text-sm">Tidak ada catatan saat ini.</p>
-    @endif
+{{-- CATATAN KHUSUS PELANGGAN --}}
+<div class="bg-white rounded-2xl border border-gray-100 p-6">
+  <h3 class="font-bold text-gray-900 mb-4">Catatan Khusus Pelanggan</h3>
+  @if($tugasSelanjutnya)
+  <div class="border-l-4 border-[#064E3B] pl-4 bg-green-50/50 py-3 pr-4 rounded-r-xl">
+    <p class="text-gray-600 text-sm italic leading-relaxed">
+      "Pastikan membawa perlengkapan lengkap untuk layanan {{ $tugasSelanjutnya->service_name }} di {{ $tugasSelanjutnya->address }}."
+    </p>
   </div>
-
-  <div class="bg-white rounded-2xl border border-gray-100 p-6">
-    <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-4">Bantuan Cepat</p>
-    <div class="space-y-2">
-      <a href="#" class="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition group">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-            <svg class="w-4 h-4 text-[#064E3B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-            </svg>
-          </div>
-          <span class="text-sm font-semibold text-gray-700">Hubungi Admin</span>
-        </div>
-        <svg class="w-4 h-4 text-gray-300 group-hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-      <a href="#" class="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition group">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          <span class="text-sm font-semibold text-gray-700">Panduan SOP</span>
-        </div>
-        <svg class="w-4 h-4 text-gray-300 group-hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-  </div>
-
+  @else
+  <p class="text-gray-400 text-sm">Tidak ada catatan saat ini.</p>
+  @endif
 </div>
 
 @endsection

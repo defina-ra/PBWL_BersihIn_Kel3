@@ -1,12 +1,5 @@
-{{-- ============================================================ --}}
-{{-- PETUNJUK: Tempel semua kode di bawah ini ke dalam           --}}
-{{-- resources/views/bersihin/layouts/admin.blade.php            --}}
-{{-- tepat sebelum tag penutup </body>                           --}}
-{{-- ============================================================ --}}
+</body>                           --}}
 
-
-{{-- 1. Tombol Logout di Sidebar --}}
-{{-- Cari bagian tombol Logout di sidebar kamu, ganti dengan ini: --}}
 
 <button onclick="document.getElementById('modalLogout').classList.remove('hidden')"
     class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-300 hover:bg-red-900/30 hover:text-red-200 rounded-xl transition">
@@ -18,10 +11,7 @@
 </button>
 
 
-{{-- ============================================================ --}}
-{{-- 2. Modal Konfirmasi Logout                                   --}}
-{{-- Tempel ini tepat sebelum </body> di admin.blade.php          --}}
-{{-- ============================================================ --}}
+</body> 
 
 <div id="modalLogout"
     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"

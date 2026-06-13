@@ -502,7 +502,38 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
     });
 
     Route::get('/bersihin/petugas/pengaturan', function () {
-        return view('bersihin.petugas.pengaturan');
+        $user = \Auth::user();
+        $totalSelesai = \DB::table('bookings')
+            ->where('petugas_id', $user->id)
+            ->where('status', 'done')
+            ->count();
+        $rating = \DB::table('reviews')
+            ->whereIn('booking_id', \DB::table('bookings')->where('petugas_id', $user->id)->pluck('id'))
+            ->avg('rating');
+        return view('bersihin.petugas.pengaturan', compact('user', 'totalSelesai', 'rating'));
+    });
+
+    Route::post('/bersihin/petugas/pengaturan', function () {
+        $user = \Auth::user();
+        $data = request()->validate([
+            'name'  => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+        ]);
+        if (request()->hasFile('avatar')) {
+            $path = request()->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = $path;
+        }
+        \App\Models\User::where('id', $user->id)->update($data);
+        if (request('password_baru') && request('password_lama')) {
+            if (!\Hash::check(request('password_lama'), $user->password)) {
+                return back()->with('error', 'Password lama tidak sesuai!');
+            }
+            \App\Models\User::where('id', $user->id)->update([
+                'password' => \Hash::make(request('password_baru')),
+            ]);
+        }
+        return back()->with('success', 'Profil berhasil diperbarui! ✅');
     });
 });
 
